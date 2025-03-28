@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
+</head>
+<body>
+    <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle">
+    <label for="mobile-menu-toggle" class="mobile-menu-button">☰</label>
+    <!-- Боковая панель -->
+    <div class="sidebar">
+        <div class="profile-section">
+            <h3>{{ user.username }}</h3>
+            <p>{{ user.name }}</p>
+        </div>
+        
+        <ul class="nav-menu">
+            {% if user.adding_classes %}{% endif %}
+            <li class="nav-item" onclick="location.href='/admin'">Galvena</li>
+            <li class="nav-item" onclick="location.href='user'">Lietotājs</li>
+            {% if user.adding_classes %} <li class="nav-item" onclick="location.href='classes'">Klases</li> {% endif %}
+            {% if user.adding_category %} <li class="nav-item" onclick="location.href='criteria'">Kritēriji</li> {% endif %}
+            {% if user.adding_users %} <li class="nav-item" onclick="location.href='administration'">Lietotāju pārvaldība</li> {% endif %}
+            <li class="nav-item exit" onclick="location.href='/logout'">Iziet no sistemas</li>
+        </ul>
+    </div>
+
+
+    <!-- Основной контент -->
+    <div class="main-content">
+        <!-- Уведомления -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <!-- <div class="alert alert-success">Успешно сохранено!</div> -->
+        
+        <!-- Секция Никнейма -->
+        <div class="section">
+            <h2>Mainīt segvārdu</h2>
+            <form action="{{url_for('admin.change_username')}}" method="POST">
+                <div class="form-group">
+                    <label>Jauns segvārds</label>
+                    <input type="text" name="username" placeholder="{{user.username}}" required>
+                </div>
+                <button class="btn btn-primary">Saglabāt</button>
+            </form>
+        </div>
+
+         <!-- Секция пользователя -->
+         <div class="section">
+            <h2>Mainīt paroli</h2>
+            <form action="{{url_for('admin.change_password')}}" method="POST">
+                <div class="form-group">
+                    <label>Jauna parole</label>
+                    <input type="password" name="password" required>
+                </div>
+                <button class="btn btn-primary">Saglabāt</button>
+            </form>
+        </div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой класс</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            padding: 20px;
+        }
+
+        .class-header {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .stats-container {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .stat-item {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .criteria-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .criteria-table th,
+        .criteria-table td {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            text-align: left;
+        }
+
+        .criteria-details {
+            display: none;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .criteria-toggle:checked ~ .criteria-details {
+            display: block;
+        }
+
+        .point-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 768px) {
+            .criteria-table td:nth-child(3),
+            .criteria-table th:nth-child(3) {
+                display: none;
+            }
+            
+            .stat-item {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Заголовок класса -->
+    <div class="class-header">
+        <h1>9-А Математический</h1>
+        <div class="stats-container" style="margin-top: 15px;">
+            <div class="stat-item">
+                <div>Ваше место</div>
+                <div style="font-size: 24px; color: #28a745; margin-top: 5px;">3</div>
+            </div>
+            <div class="stat-item">
+                <div>Максимальный балл</div>
+                <div style="font-size: 24px; color: #28a745; margin-top: 5px;">245</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица критериев -->
+    <table class="criteria-table">
+        <thead>
+            <tr>
+                <th>Критерий</th>
+                <th>Активность</th>
+                <th>Максимум</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Критерий 1 -->
+            <tr>
+                <td>
+                    <input type="checkbox" id="criteria1" class="criteria-toggle" hidden>
+                    <label for="criteria1" style="cursor: pointer;">Учебная деятельность</label>
+                    <div class="criteria-details">
+                        <div class="point-item">
+                            <h4>15 баллов</h4>
+                            <p>Иванов Пётр</p>
+                            <p style="color: #6c757d; margin-top: 5px;">Победа в олимпиаде</p>
+                        </div>
+                        <div class="point-item">
+                            <h4>10 баллов</h4>
+                            <p>Сидорова Анна</p>
+                            <p style="color: #6c757d; margin-top: 5px;">Участие в конференции</p>
+                        </div>
+                    </div>
+                </td>
+                <td>85%</td>
+                <td>200</td>
+            </tr>
+
+            <!-- Критерий 2 -->
+            <tr>
+                <td>
+                    <input type="checkbox" id="criteria2" class="criteria-toggle" hidden>
+                    <label for="criteria2" style="cursor: pointer;">Спортивные достижения</label>
+                    <div class="criteria-details">
+                        <div class="point-item">
+                            <h4>20 баллов</h4>
+                            <p>Петров Иван</p>
+                            <p style="color: #6c757d; margin-top: 5px;">1 место по баскетболу</p>
+                        </div>
+                    </div>
+                </td>
+                <td>65%</td>
+                <td>150</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

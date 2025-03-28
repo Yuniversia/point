@@ -1,0 +1,234 @@
+/* Стили из index.html */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    display: flex;
+}
+
+/* Боковая панель */
+.sidebar {
+    width: 280px;
+    background: white;
+    padding: 2rem 1.5rem;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    position: fixed;
+    height: 100vh;
+}
+
+.profile-section {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.profile-section img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.nav-menu {
+    list-style: none;
+    margin: 2rem 0;
+}
+
+.nav-item {
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.exit {
+    color: red;
+    background-color: #ffeeee;
+}
+
+.nav-item:hover {
+    background: #e9ecef;
+}
+
+/* Основной контент */
+.main-content {
+    margin-left: 280px;
+    padding: 2rem;
+    flex-grow: 1;
+}
+
+/* Секции */
+.section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+}
+
+/* Формы */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+/* Таблицы */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.table th, .table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Кнопки */
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #28a745;
+    color: white;
+}
+
+.btn-submit {
+    background: #28a745;
+    color: white;
+    padding: 12px;
+}
+
+.btn-submit:hover {
+    background: #259b40;
+    color: white;
+    padding: 12px;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+    width: auto;
+}
+
+.btn-danger:hover {
+    background: #c02e3d;
+    color: white;
+    width: auto;
+}
+
+/* Уведомления */
+.alert {
+    position: absolute;
+    top: 0;
+    width: auto;
+    text-align: center;
+    pointer-events: none;
+
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    animation: fadeOut 3s forwards;
+    animation-delay: 2s;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Side bar для телефона */
+.mobile-menu-toggle { display: none; }
+.mobile-menu-button {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #2c3e50;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: -100%;
+        left: 0;
+        transition: top 0.3s ease;
+        z-index: 999;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .mobile-menu-button { display: block; }
+    
+    .mobile-menu-toggle:checked ~ .sidebar {
+        top: 0;
+    }
+
+    .main-content {
+        margin-top: 70px;
+    }
+
+    .nav-menu {
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+    }
+
+    .profile-section {
+        padding-top: 0.25rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .sidebar {
+        display: block!important;
+    }
+}

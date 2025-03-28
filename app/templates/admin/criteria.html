@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="lv" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kritēriji</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
+</head>
+<body>
+    <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle">
+    <label for="mobile-menu-toggle" class="mobile-menu-button">☰</label>
+    <!-- Боковая панель -->
+    <div class="sidebar">
+        <div class="profile-section">
+            <h3>{{ user.username }}</h3>
+            <p>{{ user.name }}</p>
+        </div>
+        
+        <ul class="nav-menu">
+            {% if user.adding_classes %}{% endif %}
+            <li class="nav-item" onclick="location.href='/admin'">Galvena</li>
+            <li class="nav-item" onclick="location.href='user'">Lietotājs</li>
+            {% if user.adding_classes %} <li class="nav-item" onclick="location.href='classes'">Klases</li> {% endif %}
+            {% if user.adding_category %} <li class="nav-item" onclick="location.href='criteria'">Kritēriji</li> {% endif %}
+            {% if user.adding_users %} <li class="nav-item" onclick="location.href='administration'">Lietotāju pārvaldība</li> {% endif %}
+            <li class="nav-item exit" onclick="location.href='/logout'">Iziet no sistemas</li>
+        </ul>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Секция добавления критерия -->
+        <div class="section">
+            <h2>Pievienot kritēriju</h2>
+            <form method="POST" action="{{ url_for('admin.add_criteria') }}">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Kritērija nosaukums" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" step="0.1" name="coefficient" placeholder="Koeficients" required>
+                </div>
+                <input type="submit" class="btn btn-submit" value="Pievienot">
+            </form>
+        </div>
+
+        <!-- Таблица критериев -->
+        <div class="section">
+            <h2>Esošie kritēriji</h2>
+            <table class="table">
+                <tr>
+                    <th>Kritērijs</th>
+                    <th>Procenti</th>
+                    <th>Koeficients</th>
+                    <th>Darbības</th>
+                </tr>
+                {% if criteria %}
+                    {% for criterion in criteria %}
+                    <tr>
+                        <td>{{ criterion.name }}</td>
+                        <td>{{ percentages[loop.index0] }}%</td>
+                        <td>{{ criterion.coefficient }}</td>
+                        <td>
+                            <!-- Модальное окно редактирования -->
+                            <input type="checkbox" id="edit-{{ criterion.id }}" class="modal-toggle">
+                            <label for="edit-{{ criterion.id }}" class="btn btn-primary">Labot</label>
+                            
+                            <div class="modal">
+                                <div class="modal-content">
+                                    <label style="position:absolute; top:1rem; right:1rem" for="edit-{{ criterion.id }}">✕</label>
+                                    <h3>Rediģēt kritēriju</h3>
+                                    <form method="POST" action="{{ url_for('admin.change_criteria') }}">
+                                        <div class="form-group">
+                                            <input type="text" name="name" value="{{ criterion.name }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="number" step="0.1" name="coefficient" value="{{ criterion.coefficient }}" required>
+                                        </div>
+                                        <div class="action-buttons">
+                                            <input type="submit" class="btn btn-submit" value="Saglabāt">
+                                            <form>
+                                                <input type="submit" class="btn btn-danger" value="Dzēst">
+                                            </form>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </div>
+
+    <style>
+        /* Модальное окно из index.html */
+        .modal-toggle { display: none; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-toggle:checked ~ .modal { display: flex; }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+</body>
+</html>

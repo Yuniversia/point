@@ -1,0 +1,5 @@
+instance/
+__pycache__/
+rotes/__pycache__/
+models/__pycache__/
+app/static/images/uploads/

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J5vsk - Рейтинг классов</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+</head>
+<body>
+    <input type="checkbox" id="modal-toggle" class="modal-toggle" hidden>
+    
+    <nav class="navbar">
+        <h1 style="color: #2c3e50;">J5vsk</h1>
+        <label for="modal-toggle" class="login-btn">Войти</label>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        <section class="ranking-section">
+            <h2 class="section-title">Топ классов по пунктам</h2>
+            <div class="places-container">
+
+                {% if top %}
+                    {% for item in top %}
+
+                        {% if loop.index0 == 0 %}
+                            {% for key, value in item.items() %}
+
+                            <div class="first-place">
+                                <div class="place-number">1</div>
+                                <h3>Класс {{ key }}</h3>
+                                <p>Активность: {{ value }}</p>
+                            </div>
+                            {% endfor %}
+
+                        {% elif loop.index0 < 3 %}  
+                        {% set loop_index = loop.index %}  
+                    
+                        <div class="other-places">
+
+                            {% for key, value in item.items() %}
+                            <div class="place-card">
+                                <div class="place-number">{{ loop_index }}</div>
+                                <div>
+                                    <h3>Класс {{ key }}</h3>
+                                    <p>Активность: {{ value }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% endif %} 
+                    <!-- <div class="place-card">
+                        <div class="place-number">3</div>
+                        <div>
+                            <h3>Класс </h3>
+                            <p>Количество пунктов: </p>
+                        </div>
+                    </div> -->
+                    </div>
+            </div>
+        </section>
+
+        <section class="controls">
+            <h2 class="section-title">Поменять категорию</h2>
+            <div class="select-group">
+                <form method="GET" action="{{ url_for('main.index') }}" style="display: flex; justify-content: center; width: 100%;">
+                    <select name="group" onchange="this.form.submit()">
+                        <option value="young" {% if group == 'young' %}selected{% endif %}>Junioru grupa</option>
+                        <option value="old" {% if group == 'old' %}selected{% endif %}>Vecākā grupa</option>
+                    </select>
+                </form>
+            </div>
+
+            <h2 class="section-title">Выберите класс</h2>
+            <div class="select-group">
+                <form method="GET" action="/class">
+                    <select onchange="this.form.submit()">
+                        {% for class in classes %}
+                            <option name="{{ class.id }}">{{ class.name }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <div class="action-buttons">
+                <form action="/grafik">
+                    <input type="submit" class="action-btn" value="Dežures grafiks">
+                </form>
+                <form action="/criterion">
+                    <input type="submit" class="action-btn" value="Vertešanas kriteriji">
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно -->
+    <div class="modal">
+        <label class="modal-overlay" for="modal-toggle"></label>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Добро пожаловать</h2>
+                <label class="modal-close" for="modal-toggle">&times;</label>
+            </div>
+            <form class="auth-form" method="POST" action="{{url_for('login.login')}}">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" placeholder="Введите ваш username" name="username" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" placeholder="Введите пароль" name="password" class="form-input">
+                </div>
+                <input class="login-submit-btn" type="submit" value="Войти">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

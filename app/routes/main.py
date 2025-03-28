@@ -1,0 +1,125 @@
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, send_from_directory, send_file, flash
+from flask_login import current_user
+from sqlalchemy import desc
+
+from threading import Thread
+import redis
+import json
+
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+
+# thread = Thread(target=my_func, args=('args'))
+
+def max_point_cashing():
+    for criterion in Category.query.all():
+        max_point = Total_point.query.filter_by(category_id=criterion.id).order_by(desc(Total_point.total_point)).first()
+        if not max_point:
+            max_point = 0
+        else:
+            max_point = max_point.total_point
+        r.set(f'{criterion.name}', max_point)
+
+    return True
+
+def cashing_top_by_group(group):
+    classes = ClassGroup.query.filter_by(age_group=group).order_by(ClassGroup.name).all()
+    criteria = Category.query.all()
+    
+    total_activs = {}
+    coefficient_sum = Category.coefficient_sum()
+    for school_class in classes: 
+        activ_list = []
+
+        for criterion in criteria:
+            max_point = r.get(f'{criterion.name}') # Get data from redis to optimize code
+            point = Total_point.query.filter_by(category_id=criterion.id, class_id=school_class.id).one_or_none()
+            if point and max_point and int(max_point) != 0:
+                activity = point.total_point / int(max_point)
+            else:
+                activity = 0
+            
+            activity = round(activity, 2)
+
+            activity = activity * criterion.coefficient
+            activ_list.append(activity)
+            
+            
+
+        total_activs[f"{school_class.name}"] = round(sum(activ_list) / coefficient_sum, 2)
+
+    mapping = {}
+    sorted_activs = sorted(total_activs.items(), key=lambda item: item[1], reverse=True)
+    for i, (key, item) in enumerate(sorted_activs, start=1):
+        mapping[i] = json.dumps({key: item})
+
+    r.hset(f"{group}", mapping=mapping)
+
+from app.models.class_group import ClassGroup
+from app.models.user import User
+from app.models.point import Point
+from app.models.total_points import Total_point
+from app.models.category import Category
+
+import random
+import os
+
+main_bp = Blueprint('main', __name__)
+
+@main_bp.route('/')
+def index():
+
+    group = request.args.get('group', default=None, type=str)
+    if group == None:
+        return redirect(url_for('main.index') + "?group=young")
+    
+    max_point_cashing()
+    cashing_top_by_group(group)
+
+    classes = ClassGroup.query.filter_by(age_group=group).order_by(ClassGroup.name).all()
+    
+    try:
+        top = list(map(json.loads, r.hmget(f"{group}", ['1', '2', '3'])))
+    except:
+        top = None
+
+    return render_template('index.html', classes = classes, group=group, top=top)
+
+
+@main_bp.route('/class')
+def class_stat():
+    id = request.args.get('id')
+
+    return render_template('class.html')
+
+@main_bp.route('/criterion')
+def criteria():
+    path = os.path.join('static/images/uploads/')
+    print(path)
+
+    try:
+        return send_from_directory(path,'criterion.pdf')
+    except FileNotFoundError as e:
+        print(f"File not found error: {e}")
+        flash('Fails nebija atrasts', 'error')
+        return redirect(url_for('main.index'))
+    
+    except Exception as e:
+        flash('Serverim ir problema', 'error')
+        return redirect(url_for('main.index'))
+    
+@main_bp.route('/grafik')
+def grafik():
+    path = os.path.join('static/images/uploads/')
+    print(path)
+
+    try:
+        return send_from_directory(path,'schedule.pdf')
+    except FileNotFoundError as e:
+        print(f"File not found error: {e}")
+        flash('Fails nebija atrasts', 'error')
+        return redirect(url_for('main.index'))
+    
+    except Exception as e:
+        flash('Serverim ir problema', 'error')
+        return redirect(url_for('main.index'))
+    

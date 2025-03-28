@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galvenā</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
+</head>
+<body>
+    <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle">
+    <label for="mobile-menu-toggle" class="mobile-menu-button">☰</label>
+    <!-- Боковая панель -->
+    <div class="sidebar">
+        <div class="profile-section">
+            <h3>{{ user.username }}</h3>
+            <p>{{ user.name }}</p>
+        </div>
+        
+        <ul class="nav-menu">
+            {% if user.adding_classes %}{% endif %}
+            <li class="nav-item" onclick="location.href='/admin'">Galvena</li>
+            <li class="nav-item" onclick="location.href='user'">Lietotājs</li>
+            {% if user.adding_classes %} <li class="nav-item" onclick="location.href='classes'">Klases</li> {% endif %}
+            {% if user.adding_category %} <li class="nav-item" onclick="location.href='criteria'">Kritēriji</li> {% endif %}
+            {% if user.adding_users %} <li class="nav-item" onclick="location.href='administration'">Lietotāju pārvaldība</li> {% endif %}
+            <li class="nav-item exit" onclick="location.href='/logout'">Iziet no sistemas</li>
+        </ul>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Форма добавления пунктов -->
+        <div class="section">
+            <h2>Pievienot punktus</h2>
+            <form method="POST" action="{{ url_for('admin.add_point') }}" class="form-flex">
+                <div class="form-row">
+                    <select name="class_id" class="form-control">
+                        {% for class in classes %}
+                            <option value="{{ class.id }}">{{ class.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="number" name="points" step="0.5" class="form-control" placeholder="Punkti" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="description" placeholder="Aprakst par ko ir punkti" required>
+                </div>
+                <div class="form-group">
+                    <select name="criterion_id" class="form-control" required>
+                        {% for criterion in criteria %}
+                            <option value="{{ criterion.id }}">{{ criterion.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input type="submit" class="btn btn-submit" value="Pievienot">
+            </form>
+        </div>
+
+        <!-- Фильтр групп -->
+        <div class="section">
+            <form method="GET" action="{{ url_for('admin.main') }}">
+                <select name="group" onchange="this.form.submit()" class="form-control">
+                    <option value="young" {% if group == 'young' %}selected{% endif %}>Junioru grupa</option>
+                    <option value="old" {% if group == 'old' %}selected{% endif %}>Vecākā grupa</option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Секция загрузки файлов -->
+        <div class="section">
+            <h2 style="margin-bottom: 2rem; text-align: center;">Failu augšupielāde</h2>
+            
+            <div style="display: flex; width: 100%; justify-content: space-around;">
+                <!-- Форма загрузки файлов критериев -->
+                <form method="POST" action="/admin/files" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="criteria-file" class="btn btn-primary" style="display: inline-block; margin-bottom: 1rem;">
+                            Izvēlēties kritēriju failu
+                            <input type="hidden" name="file_type" value="criterion">
+                            <input type="file" id="criteria-file" name="file" style="display: none;" onchange="this.form.submit()" accept=".pdf">
+                        </label>
+                    </div>
+                </form>
+
+                <!-- Форма загрузки файлов aktivitātes -->
+                <form method="POST" action="/admin/files" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="activity-file" class="btn btn-primary" style="display: inline-block;">
+                            Izvēlēties aktivitāšu failu
+                            <input type="hidden" name="file_type" value="schedule">
+                            <input type="file" id="activity-file" name="file" style="display: none;" onchange="this.form.submit()">
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Таблица классов -->
+        <div class="section">
+            <h2>Top klases</h2>
+            <table class="table clickable-table">
+                <tr>
+                    <th>Vieta</th>
+                    <th>Klase</th>
+                    <th>Aktivitāte</th>
+                </tr>
+                {% for class, activity in filtered_classes.items() %}
+                <tr onclick="window.location.href='/class/{{ class.id }}'">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ class }}</td>
+                    <td>{{ activity*100 }}%</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <style>
+        .form-flex .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-control {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+        }
+
+        .clickable-table tr {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .clickable-table tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</body>
+</html>

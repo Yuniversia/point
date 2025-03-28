@@ -1,0 +1,308 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+
+        /* Навбар */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .login-btn {
+            background: #28a745;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Модальное окно */
+        .modal-toggle { display: none; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-toggle:checked ~ .modal {
+            display: flex;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            animation: modalAppear 0.3s ease;
+            z-index: 1001;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: #6c757d;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #495057;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-input {
+            padding: 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #28a745;
+        }
+
+        .forgot-password {
+            align-self: flex-end;
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .login-submit-btn {
+            background: #28a745;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .login-submit-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 1.5rem;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Секция с рейтингом */
+        .ranking-section {
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .places-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .first-place {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .other-places {
+            display: grid;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .place-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            text-align: left;
+            gap: 1rem;
+        }
+
+        .place-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #28a745;
+            min-width: 50px;
+        }
+
+        /* Управление */
+        .controls {
+            padding: 2rem 5%;
+            background: rgba(255,255,255,0.9);
+            margin-top: 3rem;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+        }
+
+        .select-group {
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+            max-width: 400px;
+            margin: 0.5rem 0;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            background: #28a745;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .other-places { grid-template-columns: 1fr; }
+            .first-place { max-width: 100%; }
+        }
+
+        /* Уведомления */
+        .alert {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            animation: fadeOut 3s forwards;
+            animation-delay: 2s;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @keyframes fadeOut {
+            from {opacity: 1;}
+            to {opacity: 0;}
+        }
