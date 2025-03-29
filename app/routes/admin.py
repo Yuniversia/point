@@ -66,6 +66,10 @@ def add_point():
     category_id = request.form.get("criterion_id")
     description = request.form.get("description")
 
+    # Желательно группу получать как-то подругому
+    group = db.session.get(ClassGroup, class_id)
+    group = group.age_group
+
     point_class = Point(
         class_id=class_id,
         value=point_value,
@@ -86,7 +90,7 @@ def add_point():
     db.session.commit()
 
     flash('Punkti bija veiksmīgi pievienoti', 'success')
-    return redirect(url_for('admin.main')), 301
+    return redirect(url_for('admin.main') + f"?group={group}"), 301
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -164,7 +168,7 @@ def school_class():
         db.session.commit()
 
         flash('Klase veiksmīgi pievienota', 'success')
-        return redirect(url_for('admin.school_class')), 301
+        return redirect(url_for('admin.school_class') + f"?group={group}")
     else:
         group = request.args.get('group', default=None, type=str)
         if group == None:
@@ -182,11 +186,12 @@ def delete_class():
     id = request.form.get('id')
 
     school_class = db.session.get(ClassGroup, {"id": id})
+    print(school_class)
     db.session.delete(school_class)
     db.session.commit()
 
     flash('Klase veiksmīgi dzēsta', 'success')
-    return redirect(url_for('admin.main')), 301
+    return redirect(url_for('admin.school_class') + f"?group={school_class.age_group}"), 301
 
 @admin_bp.route("/criteria")
 @login_required

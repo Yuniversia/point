@@ -47,8 +47,8 @@
                 </div>
                 <div class="form-group">
                     <select name="group" required>
-                        <option value="young">Junioru grupa</option>
-                        <option value="old" >Vecākā grupa</option>
+                        <option value="young" {% if group == "young" %} selected {% endif %}>Junioru grupa</option>
+                        <option value="old" {% if group == "old" %} selected {% endif %}>Vecākā grupa</option>
                     </select>
                 </div>
                 <input type="submit" class="btn btn-submit" value="Pievienot"></button>

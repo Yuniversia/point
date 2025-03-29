@@ -11,7 +11,8 @@ class ClassGroup(db.Model):
     age_group = db.Column(db.String(10), nullable=False) 
     
     # Отношения
-    points = db.relationship('Point', backref='class_group', lazy='dynamic')
+    points = db.relationship('Point', backref='class_group', lazy='dynamic', cascade="all, delete")
+    total_point = db.relationship('Total_point', backref='class_group', lazy='dynamic', cascade="all, delete")
 
     def __init__(self, name: str, age_group: str):
         self.name = name
