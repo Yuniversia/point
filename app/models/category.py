@@ -16,14 +16,9 @@ class Category(db.Model):
         self.coefficient = coefficient
 
 
-    # TO DO: Переделать на встроенные методы sql
     @staticmethod
     def coefficient_sum():
         sum = db.session.query(func.sum(Category.coefficient)).one()
-        # sum = 0
-        # for category in Category.query.all():
-            # sum += category.coefficient
-        
         return sum[0]
     
     def __repr__(self):

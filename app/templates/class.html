@@ -3,155 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой класс</title>
+    <title>Критерии</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
         body {
-            background: #f8f9fa;
-            padding: 20px;
+            display: block;
         }
 
         .class-header {
             background: white;
-            padding: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 70%;
         }
 
-        .stats-container {
+        .stats-grid {
             display: grid;
-            gap: 15px;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
         }
 
         .stat-item {
-            background: #e9ecef;
-            padding: 15px;
+            background: #f8f9fa;
+            padding: 1.5rem;
             border-radius: 8px;
             text-align: center;
         }
 
-        .criteria-table {
+        .stat-value {
+            font-size: 1.5rem;
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+
+        .criteria-container {
+            width: 70%;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .criteria-item {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .criteria-header {
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            transition: background 0.2s;
+        }
+
+        .criteria-header:hover {
+            background: #f1f3f5;
+        }
+
+        .criteria-content {
+            display: none;
+            padding: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .details-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-top: 1rem;
         }
 
-        .criteria-table th,
-        .criteria-table td {
-            padding: 15px;
-            border-bottom: 1px solid #dee2e6;
-            text-align: left;
-        }
-
-        .criteria-details {
-            display: none;
-            padding: 20px;
+        .details-table th {
             background: #f8f9fa;
-            border-radius: 8px;
-            margin-top: 10px;
+            font-weight: 500;
         }
 
-        .criteria-toggle:checked ~ .criteria-details {
+        .details-table th,
+        .details-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"]:checked ~ .criteria-content {
             display: block;
+            animation: slideDown 0.3s ease;
         }
 
-        .point-item {
-            background: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            .criteria-table td:nth-child(3),
-            .criteria-table th:nth-child(3) {
-                display: none;
+            .class-header,
+            .criteria-container {
+                width: 90%;
+                padding: 1rem;
             }
             
             .stat-item {
-                font-size: 14px;
+                padding: 1rem;
             }
+        }
+
+        /* Добавленные стили */
+        .criteria-header span:first-child {
+            flex: 1;
+            min-width: 0;
+            padding-right: 1rem;
+            word-break: break-word;
+            hyphens: auto;
+        }
+
+        .criteria-header span:last-child {
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #28a745;
+            width: 75%;
+            transition: width 0.3s ease;
+        }
+
+        .criteria-details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .criteria-total {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-left: 4px;
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 1.5rem 0;
+        }
+
+        /* Модифицированные существующие стили */
+        .criteria-header {
+            align-items: flex-start;
+            padding: 1.25rem;
+        }
+
+        .criteria-content {
+            padding: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .criteria-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .criteria-header span:last-child {
+                align-self: flex-end;
+            }
+        }
+        tr {
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <!-- Заголовок класса -->
     <div class="class-header">
-        <h1>9-А Математический</h1>
-        <div class="stats-container" style="margin-top: 15px;">
+        <h2>Klase: {{ clase.name }}</h2>
+        <div class="stats-grid">
             <div class="stat-item">
-                <div>Ваше место</div>
-                <div style="font-size: 24px; color: #28a745; margin-top: 5px;">3</div>
+                <div class="stat-value"><b>{{ place + 1 }} vieta</b></div>
+                <div class="divider"></div>
+                <div class="stat-label">No {{ classes_count }} klasem</div>
             </div>
             <div class="stat-item">
-                <div>Максимальный балл</div>
-                <div style="font-size: 24px; color: #28a745; margin-top: 5px;">245</div>
+                <div class="stat-value"><b>{{ activity[0] }}</b></div>
+                <div class="divider"></div>
+                <div class="stat-label">Klases aktivitate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><b>{{ max_activity[0] }}</b></div>
+                <div class="divider"></div>
+                <div class="stat-label">Maksimala aktivitate grupā</div>
             </div>
         </div>
     </div>
 
-    <!-- Таблица критериев -->
-    <table class="criteria-table">
-        <thead>
-            <tr>
-                <th>Критерий</th>
-                <th>Активность</th>
-                <th>Максимум</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Критерий 1 -->
-            <tr>
-                <td>
-                    <input type="checkbox" id="criteria1" class="criteria-toggle" hidden>
-                    <label for="criteria1" style="cursor: pointer;">Учебная деятельность</label>
-                    <div class="criteria-details">
-                        <div class="point-item">
-                            <h4>15 баллов</h4>
-                            <p>Иванов Пётр</p>
-                            <p style="color: #6c757d; margin-top: 5px;">Победа в олимпиаде</p>
-                        </div>
-                        <div class="point-item">
-                            <h4>10 баллов</h4>
-                            <p>Сидорова Анна</p>
-                            <p style="color: #6c757d; margin-top: 5px;">Участие в конференции</p>
-                        </div>
-                    </div>
-                </td>
-                <td>85%</td>
-                <td>200</td>
-            </tr>
+    <!-- Критерии -->
+    <div class="criteria-container">
 
-            <!-- Критерий 2 -->
-            <tr>
-                <td>
-                    <input type="checkbox" id="criteria2" class="criteria-toggle" hidden>
-                    <label for="criteria2" style="cursor: pointer;">Спортивные достижения</label>
-                    <div class="criteria-details">
-                        <div class="point-item">
-                            <h4>20 баллов</h4>
-                            <p>Петров Иван</p>
-                            <p style="color: #6c757d; margin-top: 5px;">1 место по баскетболу</p>
+        {% for criterion, value in criteria.items() %}
+            <div class="criteria-item">
+                <input type="checkbox" id="criteria{{criterion}}">
+                <label class="criteria-header" for="criteria{{criterion}}">
+                    <span>{{ criterion }}</span>
+                    {% for activity, max in value.items() %}
+                    <span><b> {{ activity }} / {{ max }}</b></span>
+                    {% endfor %}
+                </label>
+                
+                <div class="criteria-content">
+                    <div class="criteria-details-header">
+                        {% for activity, max in value.items() %}
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{(activity / max) * 100}}%"></div>
                         </div>
+                        <div class="criteria-total">Punkti: {{activity}} no {{ max }}</div>
+                        {% endfor %}
                     </div>
-                </td>
-                <td>65%</td>
-                <td>150</td>
-            </tr>
-        </tbody>
-    </table>
+
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Punkti</th>
+                                <th>Autors</th>
+                                <th>Komentāri</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for comments in adding[criterion] %}
+                                <tr>
+                                    <td>{{comments.value}}</td>
+                                    <td>{{comments.author}}</td>
+                                    <td>{{comments.description}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="divider"></div>
+                    <div style="color: #6c757d; font-size: 0.9rem; margin-top: 1rem;">
+                        Последнее обновление: 15.03.2024
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
 </body>
 </html>

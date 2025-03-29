@@ -27,32 +27,36 @@ def main(group):
     classes = ClassGroup.query.filter_by(age_group=group).order_by(ClassGroup.name).all()
     criteria = Category.query.all()
     
-    total_activs = {}
-    coefficient_sum = Category.coefficient_sum()
-    for school_class in classes: 
-        activ_list = []
+    try:
+        total_activs = {}
+        coefficient_sum = Category.coefficient_sum()
+        for school_class in classes: 
+            activ_list = []
 
-        for criterion in criteria:
-            max_point = Total_point.query.filter_by(category_id=criterion.id).order_by(desc(Total_point.total_point)).first()
-            point = Total_point.query.filter_by(category_id=criterion.id, class_id=school_class.id).one_or_none()
-            if point and max_point.total_point and max_point.total_point != 0:
-                activity = point.total_point / max_point.total_point
-            else:
-                activity = 0
-            
-            activity = round(activity, 2)
+            for criterion in criteria:
+                max_point = Total_point.query.filter_by(category_id=criterion.id).order_by(desc(Total_point.total_point)).first()
+                point = Total_point.query.filter_by(category_id=criterion.id, class_id=school_class.id).one_or_none()
+                if point and max_point.total_point and max_point.total_point != 0:
+                    activity = point.total_point / max_point.total_point
+                else:
+                    activity = 0
+                
+                activity = round(activity, 2)
 
-            activity = activity * criterion.coefficient
-            activ_list.append(activity)
+                activity = activity * criterion.coefficient
+                activ_list.append(activity)
 
-        total_activs[f"{school_class.name}"] = round(sum(activ_list) / coefficient_sum, 2)
+            total_activs[f"{school_class.name}"] = round(sum(activ_list) / coefficient_sum, 2)
 
-    print(total_activs)
-    print(sorted(total_activs.items(), key=lambda item: item[1], reverse=True))
+        print(total_activs)
+        print(sorted(total_activs.items(), key=lambda item: item[1], reverse=True))
 
-    filtered_classes = dict(sorted(total_activs.items(), key=lambda item: item[1], reverse=True))
+        filtered_classes = dict(sorted(total_activs.items(), key=lambda item: item[1], reverse=True))
 
-    return render_template('admin/admin.html', group=group, user=user, classes = classes, criteria=criteria, filtered_classes=filtered_classes)
+        return render_template('admin/admin.html', group=group, user=user, classes = classes, criteria=criteria, filtered_classes=filtered_classes)
+    
+    except:
+        return render_template('admin/admin.html', group=group, user=user, classes = classes, criteria=criteria)
 
 @admin_bp.route("/point", methods=['POST'])
 @login_required

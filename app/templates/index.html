@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J5vsk - Рейтинг классов</title>
+    <title>Gada klase</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
 </head>
 <body>
@@ -11,7 +11,7 @@
     
     <nav class="navbar">
         <h1 style="color: #2c3e50;">J5vsk</h1>
-        <label for="modal-toggle" class="login-btn">Войти</label>
+        <label for="modal-toggle" class="login-btn">Ieiet</label>
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -24,36 +24,30 @@
 
     <main>
         <section class="ranking-section">
-            <h2 class="section-title">Топ классов по пунктам</h2>
+            <h2 class="section-title">Top 3 klases pēc aktivitaties</h2>
             <div class="places-container">
 
                 {% if top %}
-                    {% for item in top %}
+                    {% for class in top %}
 
                         {% if loop.index0 == 0 %}
-                            {% for key, value in item.items() %}
-
                             <div class="first-place">
                                 <div class="place-number">1</div>
-                                <h3>Класс {{ key }}</h3>
-                                <p>Активность: {{ value }}</p>
+                                <h3>Klase {{ class }}</h3>
+                                <p>Aktivitāte: {{ activity[loop.index0] }}</p>
                             </div>
-                            {% endfor %}
 
                         {% elif loop.index0 < 3 %}  
-                        {% set loop_index = loop.index %}  
                     
                         <div class="other-places">
 
-                            {% for key, value in item.items() %}
                             <div class="place-card">
-                                <div class="place-number">{{ loop_index }}</div>
+                                <div class="place-number">{{ loop.index }}</div>
                                 <div>
-                                    <h3>Класс {{ key }}</h3>
-                                    <p>Активность: {{ value }}</p>
+                                    <h3>Klase {{ class }}</h3>
+                                    <p>Aktivitāte: {{ activity[loop.index0] }}</p>
                                 </div>
                             </div>
-                            {% endfor %}
 
                         {% endif %}
 
@@ -72,7 +66,7 @@
         </section>
 
         <section class="controls">
-            <h2 class="section-title">Поменять категорию</h2>
+            <h2 class="section-title">Mainīt kategoriju</h2>
             <div class="select-group">
                 <form method="GET" action="{{ url_for('main.index') }}" style="display: flex; justify-content: center; width: 100%;">
                     <select name="group" onchange="this.form.submit()">
@@ -82,12 +76,12 @@
                 </form>
             </div>
 
-            <h2 class="section-title">Выберите класс</h2>
+            <h2 class="section-title">Izveleties klasi</h2>
             <div class="select-group">
-                <form method="GET" action="/class">
-                    <select onchange="this.form.submit()">
+                <form method="GET" action="/class" style="display: flex; justify-content: center; width: 100%;">
+                    <select name="id" onchange="this.form.submit()">
                         {% for class in classes %}
-                            <option name="{{ class.id }}">{{ class.name }}</option>
+                            <option value="{{ class.id }}">{{ class.name }}</option>
                         {% endfor %}
                     </select>
                 </form>
@@ -109,19 +103,19 @@
         <label class="modal-overlay" for="modal-toggle"></label>
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Добро пожаловать</h2>
+                <h2>Admin panele</h2>
                 <label class="modal-close" for="modal-toggle">&times;</label>
             </div>
             <form class="auth-form" method="POST" action="{{url_for('login.login')}}">
                 <div class="form-group">
                     <label>Username</label>
-                    <input type="text" placeholder="Введите ваш username" name="username" class="form-input">
+                    <input type="text" placeholder="Iievadiet jusu username" name="username" class="form-input">
                 </div>
                 <div class="form-group">
-                    <label>Пароль</label>
-                    <input type="password" placeholder="Введите пароль" name="password" class="form-input">
+                    <label>Parole</label>
+                    <input type="password" placeholder="Iievadet paroli" name="password" class="form-input">
                 </div>
-                <input class="login-submit-btn" type="submit" value="Войти">
+                <input class="login-submit-btn" type="submit" value="Ieiet">
             </form>
         </div>
     </div>

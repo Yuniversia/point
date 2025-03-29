@@ -49,10 +49,12 @@ def cashing_top_by_group(group):
 
     mapping = {}
     sorted_activs = sorted(total_activs.items(), key=lambda item: item[1], reverse=True)
-    for i, (key, item) in enumerate(sorted_activs, start=1):
-        mapping[i] = json.dumps({key: item})
+    for key, item in sorted_activs:
+        mapping[key] = item
 
-    r.hset(f"{group}", mapping=mapping)
+    for field, value in mapping.items():
+        r.hset(f"{group}", field, value)
+        r.rpush(f"{group}_classes", str(field))
 
 from app.models.class_group import ClassGroup
 from app.models.user import User
@@ -72,24 +74,68 @@ def index():
     if group == None:
         return redirect(url_for('main.index') + "?group=young")
     
-    max_point_cashing()
-    cashing_top_by_group(group)
-
-    classes = ClassGroup.query.filter_by(age_group=group).order_by(ClassGroup.name).all()
-    
     try:
-        top = list(map(json.loads, r.hmget(f"{group}", ['1', '2', '3'])))
-    except:
-        top = None
+        r.flushdb()
+        max_point_cashing()
+        cashing_top_by_group(group)
 
-    return render_template('index.html', classes = classes, group=group, top=top)
+        classes = ClassGroup.query.filter_by(age_group=group).order_by(ClassGroup.name).all()
+    
+        top = r.lrange(f"{group}_classes", 0, 2) # get three first elements how list [2.a, 2.b, 3.a]
+        activity = r.hmget(group, top) # get results by first three index
+
+        return render_template('index.html', classes = classes, group=group, top=top, activity = activity)
+    except:
+        return render_template('index.html', group=group)
 
 
 @main_bp.route('/class')
 def class_stat():
     id = request.args.get('id')
+    school_class = ClassGroup.query.filter_by(id=id).one_or_none()
 
-    return render_template('class.html')
+    if not school_class:
+        flash('Klase nebija atrasta', 'error')
+        return redirect(url_for('main.index'))
+
+    all_classes = r.lrange(f"{school_class.age_group}_classes", 0, -1)
+
+    activity = r.hmget(school_class.age_group, school_class.name)
+    place = all_classes.index(school_class.name)
+
+    criteria = {}
+    adding = {}
+
+    class Comment:
+        def __init__(self, value, author, description):
+            self.value = value
+            self.author = author
+            self.description = description
+
+    for criterion in Total_point.query.filter_by(class_id=school_class.id).all():
+        max_point = r.get(f'{criterion.category.name}')
+        point = criterion.total_point
+
+        criteria[criterion.category.name] = {point: int(max_point)}
+
+        coms = []
+        for points in Point.query.filter_by(class_id=school_class.id, category_id=criterion.category_id):
+            table = Comment(value=points.value, 
+                                        author=points.added_by,
+                                        description=points.description)
+            print("Category points: ", table.value)
+            coms.append(table)
+            
+        adding[criterion.category.name] = coms
+
+    classes_count = len(all_classes)
+
+    first_place = r.lrange(f"{school_class.age_group}_classes", 0, 0)
+    max_activity = r.hmget(school_class.age_group, first_place)
+
+    return render_template('class.html', clase=school_class, activity=activity,
+                            place=place, criteria=criteria, classes_count = classes_count,
+                            adding = adding, max_activity = max_activity)
 
 @main_bp.route('/criterion')
 def criteria():

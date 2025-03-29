@@ -93,9 +93,9 @@
                 <form method="POST" action="/admin/files" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="activity-file" class="btn btn-primary" style="display: inline-block;">
-                            Izvēlēties aktivitāšu failu
+                            Izvēlēties dežures grafiku
                             <input type="hidden" name="file_type" value="schedule">
-                            <input type="file" id="activity-file" name="file" style="display: none;" onchange="this.form.submit()">
+                            <input type="file" id="activity-file" name="file" style="display: none;" onchange="this.form.submit()" accept=".pdf">
                         </label>
                     </div>
                 </form>
@@ -111,13 +111,15 @@
                     <th>Klase</th>
                     <th>Aktivitāte</th>
                 </tr>
-                {% for class, activity in filtered_classes.items() %}
-                <tr onclick="window.location.href='/class/{{ class.id }}'">
-                    <td>{{ loop.index }}</td>
-                    <td>{{ class }}</td>
-                    <td>{{ activity*100 }}%</td>
-                </tr>
-                {% endfor %}
+                {% if filtered_classes %}
+                    {% for class, activity in filtered_classes.items() %}
+                    <tr onclick="window.location.href='/class/{{ class.id }}'">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ class }}</td>
+                        <td>{{ activity*100 }}%</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
             </table>
         </div>
     </div>
