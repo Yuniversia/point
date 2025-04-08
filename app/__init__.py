@@ -1,10 +1,10 @@
+from config import Config
+
+import os
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from config import Config
-import os
-
-from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -31,8 +31,7 @@ def create_app(config_class=Config):
 
         db.create_all()
 
-
-        # Создание admin
+        # Creating admin
         from app.models.user import User
 
         admin = User.query.filter_by(username='admin').first()
@@ -49,6 +48,13 @@ def create_app(config_class=Config):
             )
             db.session.add(admin)
             db.session.commit()
+
+        # Cashing data in redis after reboot
+        from app.models.cashing import cashing_top_by_group, max_point_cashing
+
+        max_point_cashing()
+        cashing_top_by_group("young")
+        cashing_top_by_group("old")
     
     from app.routes.main import main_bp
     from app.routes.auth import auth_bp

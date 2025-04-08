@@ -1,13 +1,13 @@
-import redis
-import json
-
 from app.models.category import Category
 from app.models.class_group import ClassGroup
 from app.models.total_points import Total_point
+from config import Config
+
+import redis
 from sqlalchemy import desc
 
 
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+r = redis.Redis(host=Config.REDIS_HOST, port=Config.REDIS_PORT, decode_responses=True)
 
 # thread = Thread(target=my_func, args=('args'))
 

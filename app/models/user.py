@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(120))
     password_hash = db.Column(db.String(128))
 
-    adding_point = db.Column(db.Boolean, default=False)
+    adding_point = db.Column(db.Boolean, default=True)
     adding_classes = db.Column(db.Boolean, default=False)
     adding_category = db.Column(db.Boolean, default=False)
     adding_users = db.Column(db.Boolean, default=False)

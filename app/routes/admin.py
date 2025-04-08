@@ -4,7 +4,7 @@ from app.models.class_group import ClassGroup, School_classes
 from app.models.category import Category
 from app.models.point import Point
 from app.models.total_points import Total_point
-from app.models.cashing import cashing_top_by_group, max_point_cashing
+from app.models.cashing import cashing_top_by_group, max_point_cashing, r
 
 import os
 
@@ -12,12 +12,8 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
-from sqlalchemy import desc
-import redis
 
 admin_bp = Blueprint('admin', __name__)
-
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 @admin_bp.route("/", defaults={'group': 'young'})
 @login_required
@@ -148,6 +144,10 @@ def change_password():
 @admin_bp.route("/classes", methods=['GET', 'POST'])
 @login_required
 def school_class():
+    if not current_user.adding_classes:
+        flash("Jūms nav tiesību", "error")
+        return redirect(request.url)
+
     if request.method == 'POST':
         print("method post")
         name = request.form.get('name')
@@ -177,6 +177,10 @@ def school_class():
 @admin_bp.route("/class/delete", methods=['POST'])
 @login_required
 def delete_class():
+    if not current_user.adding_classes:
+        flash("Jūms nav tiesību", "error")
+        return redirect(request.url)
+    
     id = request.form.get('id')
 
     school_class = db.session.get(ClassGroup, {"id": id})
@@ -190,6 +194,10 @@ def delete_class():
 @admin_bp.route("/criteria")
 @login_required
 def criteria():
+    if not current_user.adding_category:
+        flash("Jūms nav tiesību", "error")
+        return redirect(request.url)
+    
     user = User.query.filter_by(id=current_user.id).first()
     criteria = Category.query.all()
 
@@ -210,6 +218,9 @@ def criteria():
 @admin_bp.route("/criteria", methods=['POST'])
 @login_required
 def add_criteria():
+    if not current_user.adding_category:
+        flash("Jūms nav tiesību", "error")
+        return redirect(request.url)
 
     name = request.form.get('name')
     coefficient = request.form.get('coefficient')
@@ -228,6 +239,9 @@ def add_criteria():
 @admin_bp.route("/criteria/change", methods=['POST'])
 @login_required
 def change_criteria():
+    if not current_user.adding_category:
+        flash("Jūms nav tiesību", "error")
+        return redirect(request.url)
 
     name = request.form.get('name')
     coefficient = request.form.get('coefficient')
@@ -246,14 +260,21 @@ def change_criteria():
 @admin_bp.route('/administration')
 @login_required
 def administration():
+    if not current_user.adding_users:
+        flash("Jūms nav tiesību", "error")
+        return redirect(request.url)
+    
     user = User.query.filter_by(id=current_user.id).first()
 
     users = User.query.all()
     return render_template('admin/administration.html', user=user, users=users)
 
-@admin_bp.route('/users', methods=['POST'])
+@admin_bp.route('/administration', methods=['POST'])
 @login_required
 def add_user():
+    if not current_user.adding_users:
+        flash("Jūms nav tiesību", "error")
+        return redirect(request.url)
 
     username = request.form.get('username')
     name = request.form.get('name')
@@ -279,7 +300,7 @@ def add_user():
     flash('Lietotajs bija pievienots', 'success')
     return redirect(url_for('admin.administration')), 302
 
-@admin_bp.route('/users/delete', methods=['POST'])
+@admin_bp.route('/administration/delete', methods=['POST'])
 @login_required
 def delete_user():
     if current_user.adding_users:

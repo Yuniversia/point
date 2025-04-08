@@ -40,7 +40,7 @@
         <!-- Форма добавления пользователя -->
         <div class="section">
             <h2>Pievienot lietotāju</h2>
-            <form method="POST" action="/admin/users">
+            <form method="POST" action="/admin/administration">
                 <div class="form-group">
                     <input type="text" name="username" placeholder="Lietotājvārds" required>
                 </div>
@@ -94,7 +94,7 @@
                     <td>{{ user_from_list.name }}</td>
                     <td>
                         {% if user.id !=  user_from_list.id %}
-                        <form method="POST" action="users/delete">
+                        <form method="POST" action="administration/delete">
                             <input type="hidden" name="user_id" value="{{ user_from_list.id }}">
                             <input type="submit" class="btn btn-danger" value="Dzēst">
                         </form>

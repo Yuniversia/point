@@ -1,20 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, send_from_directory, send_file, flash
-from flask_login import current_user
-from sqlalchemy import desc
-import redis
-
-from app.models.cashing import cashing_top_by_group, max_point_cashing
+from app.models.cashing import cashing_top_by_group, max_point_cashing, r
 from app.models.class_group import ClassGroup, School_classes, Comment
-from app.models.user import User
 from app.models.point import Point
 from app.models.total_points import Total_point
 from app.models.category import Category
 
-import random
 import os
-from threading import Thread
 
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, send_from_directory, send_file, flash
 
 main_bp = Blueprint('main', __name__)
 
@@ -69,7 +61,6 @@ def class_stat():
             table = Comment(value=points.value, 
                                         author=points.added_by,
                                         description=points.description)
-            print("Category points: ", table.value)
             coms.append(table)
             
         adding[criterion.category.name] = coms
@@ -81,7 +72,6 @@ def class_stat():
 @main_bp.route('/criterion')
 def criteria():
     path = os.path.join('static/images/uploads/')
-    print(path)
 
     try:
         return send_from_directory(path,'criterion.pdf')
@@ -97,7 +87,6 @@ def criteria():
 @main_bp.route('/grafik')
 def grafik():
     path = os.path.join('static/images/uploads/')
-    print(path)
 
     try:
         return send_from_directory(path,'schedule.pdf')
