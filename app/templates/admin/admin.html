@@ -112,13 +112,12 @@
                     <th>Aktivitāte</th>
                 </tr>
                 {% if filtered_classes %}
-                    {% for class, activity in filtered_classes.items() %}
-                    <tr onclick="window.location.href='/class/'">
-                        <input type="hidden" name="id" value="{{ class.id }}">
-                        <td>{{ loop.index }}</td>
-                        <td>{{ class }}</td>
-                        <td>{{ activity*100 }}%</td>
-                    </tr>
+                    {% for class in filtered_classes %}
+                        <tr onclick="window.location.href='/class?id={{ class.id }}'">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ class.name }}</td>
+                            <td>{{ class.activity }}</td>
+                        </tr>
                     {% endfor %}
                 {% endif %}
             </table>

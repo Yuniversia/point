@@ -27,7 +27,6 @@ def cashing_top_by_group(group):
     criteria = Category.query.all()
     
     total_activs = {}
-    coefficient_sum = Category.coefficient_sum()
     for school_class in classes: 
         activ_list = []
 
@@ -39,27 +38,24 @@ def cashing_top_by_group(group):
             else:
                 activity = 0
             
+            activity = activity * criterion.coefficient
             activity = round(activity, 2)
 
-            activity = activity * criterion.coefficient
             activ_list.append(activity)
             
             
 
         total_activs[f"{school_class.name}"] = sum(activ_list)
-       # total_activs[f"{school_class.name}"] = round(sum(activ_list) / coefficient_sum, 2)
 
     sorted_activs = sorted(total_activs.items(), key=lambda item: item[1], reverse=True)
-    # for key, item in sorted_activs:
-    #     mapping[key] = item
+
+    r.delete(f"{group}_classes")
 
     for place, (key, value) in enumerate(sorted_activs):
+        classe = ClassGroup.query.filter_by(age_group=group, name=key).one()
         mapping = {"name": key,
+                   "id": classe.id,
                    "place": place,
                    "activity": value}
         r.hset(key, mapping=mapping)
-        r.rpush(f"{group}_classes", str(key))        
-
-    # for place, (field, value) in enumerate(mapping.items()):
-    #     r.hset(f"{group}", field, value)
-    #     r.rpush(f"{group}_classes", str(field))
+        r.rpush(f"{group}_classes", str(key))

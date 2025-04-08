@@ -1,9 +1,10 @@
 from app import db
 from app.models.user import User
-from app.models.class_group import ClassGroup
+from app.models.class_group import ClassGroup, School_classes
 from app.models.category import Category
 from app.models.point import Point
 from app.models.total_points import Total_point
+from app.models.cashing import cashing_top_by_group, max_point_cashing
 
 import os
 
@@ -12,8 +13,11 @@ from werkzeug.security import generate_password_hash
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
 from sqlalchemy import desc
+import redis
 
 admin_bp = Blueprint('admin', __name__)
+
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 @admin_bp.route("/", defaults={'group': 'young'})
 @login_required
@@ -28,30 +32,12 @@ def main(group):
     criteria = Category.query.all()
     
     try:
-        total_activs = {}
-        coefficient_sum = Category.coefficient_sum()
-        for school_class in classes: 
-            activ_list = []
+        top = r.lrange(f"{group}_classes", 0, -1) # get three first elements how list [2.a, 2.b, 3.a]
 
-            for criterion in criteria:
-                max_point = Total_point.query.filter_by(category_id=criterion.id).order_by(desc(Total_point.total_point)).first()
-                point = Total_point.query.filter_by(category_id=criterion.id, class_id=school_class.id).one_or_none()
-                if point and max_point.total_point and max_point.total_point != 0:
-                    activity = point.total_point / max_point.total_point
-                else:
-                    activity = 0
-                
-                activity = round(activity, 2)
-
-                activity = activity * criterion.coefficient
-                activ_list.append(activity)
-
-            total_activs[f"{school_class.name}"] = round(sum(activ_list) / coefficient_sum, 2)
-
-        print(total_activs)
-        print(sorted(total_activs.items(), key=lambda item: item[1], reverse=True))
-
-        filtered_classes = dict(sorted(total_activs.items(), key=lambda item: item[1], reverse=True))
+        filtered_classes = []
+        for i in top:
+            cl = r.hgetall(i)
+            filtered_classes.append(School_classes(cl["name"], cl["id"], cl["place"], cl["activity"]))
 
         return render_template('admin/admin.html', group=group, user=user, classes = classes, criteria=criteria, filtered_classes=filtered_classes)
     
@@ -86,11 +72,19 @@ def add_point():
     else:
         total_count.total_point += int(point_value)
 
-    db.session.add(point_class)
-    db.session.commit()
+    try:
+        db.session.add(point_class)
+        db.session.commit()
 
-    flash('Punkti bija veiksmīgi pievienoti', 'success')
-    return redirect(url_for('admin.main') + f"?group={group}"), 301
+        max_point_cashing()
+        cashing_top_by_group(group)
+
+        flash('Punkti bija veiksmīgi pievienoti', 'success')
+        return redirect(url_for('admin.main') + f"?group={group}"), 301
+    except:
+        db.session.reset(point_class)
+        flash('Notieka kļuda', 'error')
+        return redirect(url_for('admin.main') + f"?group={group}"), 502
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -202,7 +196,9 @@ def criteria():
     percentages = []
     sum = Category.coefficient_sum()
 
-    print(sum)
+    max_point_cashing()
+    cashing_top_by_group("young")
+    cashing_top_by_group("old")
 
     for i in criteria:
         value = (i.coefficient / sum) * 100

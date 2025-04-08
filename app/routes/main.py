@@ -4,7 +4,7 @@ from sqlalchemy import desc
 import redis
 
 from app.models.cashing import cashing_top_by_group, max_point_cashing
-from app.models.class_group import ClassGroup
+from app.models.class_group import ClassGroup, School_classes, Comment
 from app.models.user import User
 from app.models.point import Point
 from app.models.total_points import Total_point
@@ -18,12 +18,6 @@ r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 main_bp = Blueprint('main', __name__)
 
-class Comment:
-        def __init__(self, value, author, description):
-            self.value = value
-            self.author = author
-            self.description = description
-
 @main_bp.route('/')
 def index():
 
@@ -34,21 +28,12 @@ def index():
     classes = ClassGroup.query.filter_by(age_group=group).order_by(ClassGroup.name).all()
 
     try:
-        r.flushdb()
-        max_point_cashing()
-        cashing_top_by_group(group)
-
         top = r.lrange(f"{group}_classes", 0, 2) # get three first elements how list [2.a, 2.b, 3.a]
 
-        class School_classes:
-            def __init__(self, name: str, place: int, activity: float):
-                self.name = name
-                self.place = place
-                self.activity = activity
         top_clases = []
         for i in top:
             cl = r.hgetall(i)
-            top_clases.append(School_classes(cl["name"], cl["place"], cl["activity"]))
+            top_clases.append(School_classes(cl["name"], cl["id"], cl["place"], cl["activity"]))
         
 
         return render_template('index.html', classes = classes, group=group, top_clases = top_clases)

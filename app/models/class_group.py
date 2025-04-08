@@ -45,3 +45,18 @@ class ClassGroup(db.Model):
     
     def __repr__(self):
         return f'<ClassGroup {self.name}>'
+    
+# Use in main.py and admin.py top classes 
+class School_classes:
+            def __init__(self, name: str, id: int, place: int, activity: float):
+                self.name = name
+                self.id = id
+                self.place = place
+                self.activity = activity
+
+# Use in main.py /class 
+class Comment:
+        def __init__(self, value, author, description):
+            self.value = value
+            self.author = author
+            self.description = description
