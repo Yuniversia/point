@@ -47,7 +47,7 @@
                             <option value="{{ class.id }}">{{ class.name }}</option>
                         {% endfor %}
                     </select>
-                    <input type="number" name="points" step="0.5" class="form-control" placeholder="Punkti" required>
+                    <input type="number" name="points" step="0.5" class="form-control" placeholder="Punkti" required max="100">
                 </div>
                 <div class="form-group">
                     <input type="text" name="description" placeholder="Aprakst par ko ir punkti" required>
@@ -113,7 +113,8 @@
                 </tr>
                 {% if filtered_classes %}
                     {% for class, activity in filtered_classes.items() %}
-                    <tr onclick="window.location.href='/class/{{ class.id }}'">
+                    <tr onclick="window.location.href='/class/'">
+                        <input type="hidden" name="id" value="{{ class.id }}">
                         <td>{{ loop.index }}</td>
                         <td>{{ class }}</td>
                         <td>{{ activity*100 }}%</td>

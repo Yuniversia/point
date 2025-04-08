@@ -27,14 +27,16 @@
             <h2 class="section-title">Top 3 klases pēc aktivitaties</h2>
             <div class="places-container">
 
-                {% if top %}
-                    {% for class in top %}
+                {{top_clases.name}}
+
+                {% if top_clases %}
+                    {% for class in top_clases %}
 
                         {% if loop.index0 == 0 %}
                             <div class="first-place">
                                 <div class="place-number">1</div>
-                                <h3>Klase {{ class }}</h3>
-                                <p>Aktivitāte: {{ activity[loop.index0] }}</p>
+                                <h3>Klase {{ class.name }}</h3>
+                                <p>Aktivitāte: {{ class.activity }}</p>
                             </div>
 
                         {% elif loop.index0 < 3 %}  
@@ -44,8 +46,8 @@
                             <div class="place-card">
                                 <div class="place-number">{{ loop.index }}</div>
                                 <div>
-                                    <h3>Klase {{ class }}</h3>
-                                    <p>Aktivitāte: {{ activity[loop.index0] }}</p>
+                                    <h3>Klase {{ class.name }}</h3>
+                                    <p>Aktivitāte: {{ class.activity }}</p>
                                 </div>
                             </div>
 

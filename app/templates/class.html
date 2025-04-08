@@ -131,7 +131,7 @@
         }
 
         .progress-bar {
-            width: 100%;
+            width: 85%;
             height: 8px;
             background: #e9ecef;
             border-radius: 4px;
@@ -193,20 +193,20 @@
 <body>
     <!-- Заголовок класса -->
     <div class="class-header">
-        <h2>Klase: {{ clase.name }}</h2>
+        <h2>Klase: {{ classe.name }}</h2>
         <div class="stats-grid">
             <div class="stat-item">
-                <div class="stat-value"><b>{{ place + 1 }} vieta</b></div>
+                <div class="stat-value"><b>{{ classe.place | int + 1 }} vieta</b></div>
                 <div class="divider"></div>
                 <div class="stat-label">No {{ classes_count }} klasem</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value"><b>{{ activity[0] }}</b></div>
+                <div class="stat-value"><b>{{ classe.activity }}</b></div>
                 <div class="divider"></div>
                 <div class="stat-label">Klases aktivitate</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value"><b>{{ max_activity[0] }}</b></div>
+                <div class="stat-value"><b>{{ classe.activity }}</b></div>
                 <div class="divider"></div>
                 <div class="stat-label">Maksimala aktivitate grupā</div>
             </div>
