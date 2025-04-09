@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klases Kritēriji - {{ classe.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='main2.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <h1 style="color: #2c3e50;">J5vsk</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link"><i class="fas fa-home"></i> Sākums</a>
+                <a href="/#footer" class="nav-link"><i class="fas fa-info-circle"></i> Par mums</a>
+                <a href="/#new" class="nav-link"><i class="fas fa-bell"></i> Jaunumi</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-container">
+        <section class="class-header-card info-card hover-lift">
+            <i class="fas fa-chalkboard-teacher info-icon"></i>
+            <h2>Klase: {{ classe.name }}</h2>
+            <p class="class-subtitle">Detalizēta informācija par klases sniegumu</p>
+            <div class="stats-grid-revamped">
+                <div class="stat-item-revamped">
+                    <i class="fas fa-trophy stat-icon"></i>
+                    <div class="stat-value"><b>{{ classe.place | int + 1 }}. vieta</b></div>
+                    <div class="stat-label">No {{ classes_count }} klasēm grupā</div>
+                </div>
+                <div class="stat-item-revamped">
+                    <i class="fas fa-chart-line stat-icon"></i>
+                    <div class="stat-value"><b>{{ classe.activity }} punkti</b></div>
+                    <div class="stat-label">Klases kopējā aktivitāte</div>
+                </div>
+                </div>
+        </section>
+
+        <section class="criteria-section">
+            <h2 class="section-title"><i class="fas fa-tasks"></i> Vērtēšanas Kritēriji</h2>
+
+            <div class="criteria-list">
+                {% for criterion, value in criteria.items() %}
+                    <div class="criteria-item-card">
+                        <input type="checkbox" id="criteria{{criterion}}" class="criteria-toggle">
+                        <label class="criteria-header-revamped" for="criteria{{criterion}}">
+                            <div class="criteria-title">
+                                <i class="fas fa-clipboard-list criteria-icon"></i>
+                                <span>{{ criterion }}</span>
+                            </div>
+                            <div class="criteria-summary">
+                                {% for activity, max in value.items() %}
+                                <span class="badge {% if (activity/max) > 0.7 %}badge-gold{% elif (activity/max) > 0.4 %}badge-silver{% else %}badge-bronze{% endif %}">
+                                    <i class="fas fa-star"></i> {{ activity }} / {{ max }}
+                                </span>
+                                {% endfor %}
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </div>
+                        </label>
+
+                        <div class="criteria-content-revamped">
+                            {% for activity, max in value.items() %}
+                            <div class="progress-section">
+                                <div class="progress-info">
+                                    <span>Progress:</span>
+                                    <span class="criteria-total">Punkti: {{activity}} no {{ max }}</span>
+                                </div>
+                                <div class="activity-meter">
+                                    <div class="activity-bar" style="width: {{ (activity / max) * 100 }}%"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            <h4 class="details-title"><i class="fas fa-list-ul"></i> Detalizācija:</h4>
+                            {% if adding[criterion] %}
+                            <div class="table-responsive">
+                                <table class="details-table-revamped">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fas fa-plus-circle"></i> Punkti</th>
+                                            <th><i class="fas fa-user"></i> Autors</th>
+                                            <th><i class="fas fa-comment"></i> Komentāri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for comments in adding[criterion] %}
+                                            <tr>
+                                                <td>{{ comments.value }}</td>
+                                                <td>{{ comments.author }}</td>
+                                                <td>{{ comments.description }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                                <p class="no-details">Šim kritērijam vēl nav pievienoti ieraksti.</p>
+                            {% endif %}
+
+                            <div class="last-updated">
+                                <i class="fas fa-history"></i> Pēdējoreiz atjaunots: {{ current_date }} </div>
+                        </div>
+                    </div>
+                {% endfor %}
+             </div>
+        </section>
+
+         <section class="info-cards">
+             <div class="info-card hover-lift">
+                <i class="fas fa-question-circle info-icon"></i>
+                <h3>Kā tiek aprēķināti punkti?</h3>
+                <p>Punkti tiek piešķirti par dalību dažādās skolas aktivitātēs saskaņā ar noteiktiem kritērijiem.</p>
+            </div>
+            <div class="info-card hover-lift">
+                <i class="fas fa-bullhorn info-icon"></i>
+                <h3>Aktuālie Pasākumi</h3>
+                <p>Nepalaidiet garām nākamās aktivitātes, kurās var nopelnīt punktus savai klasei!</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer" id="footer">
+         <div class="footer-content">
+            <div class="footer-column">
+                <h3>Par mums</h3>
+                <p>Skolas aktivitāšu reitinga sistēma, kas veicina klašu savstarpējo konkurenci un aktivitāti.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Saites</h3>
+                <ul class="footer-links">
+                    <li><a href="/"><i class="fas fa-chevron-right"></i> Sākums</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Noteikumi</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Kontakti</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Kontakti</h3>
+                 <p onclick="window.location.href ='mailto:5vsk@izglitiba.jelgava.lv' "><i class="fas fa-envelope"></i> 5vsk@izglitiba.jelgava.lv</p>
+                <p onclick="window.location.href ='tel:+37163026073' "><i class="fas fa-phone"></i> +371 63026073</p>
+                <p onclick="window.location.href='https://maps.app.goo.gl/Won76Hfny4NVxjVo8'"><i class="fas fa-map-marker-alt"></i> Aspazijas iela 20, Jelgava</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© {{ current_year }} J5vsk. Visas tiesības aizsargātas.</p> <div class="social-icons">
+                 <a href="https://lv-lv.facebook.com/j5vsk" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/jelgavas_5vsk?igsh=d3Uxdnh6cTExZXRj" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/channel/UC7pCfPGddd3HadBnxzlXQAA" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+     <input type="checkbox" id="modal-toggle" class="modal-toggle" hidden>
+    <div class="modal">
+        <label class="modal-overlay" for="modal-toggle"></label>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-shield"></i> Admin panele</h2>
+                <label class="modal-close" for="modal-toggle">×</label>
+            </div>
+            <form class="auth-form" method="POST" action="{{url_for('login.login')}}">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Username</label>
+                    <input type="text" placeholder="Iievadiet jusu username" name="username" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Parole</label>
+                    <input type="password" placeholder="Iievadet paroli" name="password" class="form-input">
+                </div>
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Atcerēties mani</label>
+                </div>
+                <input class="login-submit-btn" type="submit" value="Ieiet">
+                <div class="form-footer">
+                    <a href="#" class="forgot-password">Aizmirsu paroli?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    // Получаем текущую дату и год для отображения
+                    current_date: new Date().toLocaleDateString('lv-LV', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+                    current_year: new Date().getFullYear()
+                }
+            },
+             mounted() {
+                // Анимация для карточек критериев при загрузке
+                const criteriaCards = document.querySelectorAll('.criteria-item-card');
+                criteriaCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100); // Небольшая задержка для каскадного эффекта
+                });
+             }
+        }).mount('body');
+    </script>
+
+</body>
+</html>

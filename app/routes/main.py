@@ -28,9 +28,9 @@ def index():
             top_clases.append(School_classes(cl["name"], cl["id"], cl["place"], cl["activity"]))
         
 
-        return render_template('index.html', classes = classes, group=group, top_clases = top_clases)
+        return render_template('index2.html', classes = classes, group=group, top_clases = top_clases)
     except:
-        return render_template('index.html', group=group, classes = classes)
+        return render_template('index2.html', group=group, classes = classes)
 
 
 @main_bp.route('/class')
@@ -65,7 +65,7 @@ def class_stat():
             
         adding[criterion.category.name] = coms
 
-    return render_template('class.html', classe=classe,
+    return render_template('class2.html', classe=classe,
                             criteria=criteria, classes_count = classes_count,
                             adding = adding)
 
