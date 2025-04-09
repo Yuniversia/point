@@ -22,15 +22,19 @@ def index():
     try:
         top = r.lrange(f"{group}_classes", 0, 2) # get three first elements how list [2.a, 2.b, 3.a]
 
+        current_app.logger.info(f"Top classes: {top}")
+
         top_clases = []
         for i in top:
             cl = r.hgetall(i)
-            top_clases.append(School_classes(cl["name"], cl["id"], cl["place"], cl["activity"]))
+            top_clases.append(School_classes(cl["name"], cl["id"], cl["age_group"], cl["place"], cl["activity"]))
+
+        current_app.logger.info(f"Top classes: {top_clases}")
         
 
-        return render_template('index2.html', classes = classes, group=group, top_clases = top_clases)
+        return render_template('index.html', classes = classes, group=group, top_clases = top_clases)
     except:
-        return render_template('index2.html', group=group, classes = classes)
+        return render_template('index.html', group=group, classes = classes)
 
 
 @main_bp.route('/class')
@@ -51,7 +55,7 @@ def class_stat():
 
     # Block to get all point adding by criterion
     for criterion in Total_point.query.filter_by(class_id=school_class.id).all():
-        max_point = r.get(f'{criterion.category.name}')
+        max_point = r.get(f'{school_class.age_group}_{criterion.category.name}')
         point = criterion.total_point
 
         criteria[criterion.category.name] = {point: int(max_point)}
@@ -65,7 +69,7 @@ def class_stat():
             
         adding[criterion.category.name] = coms
 
-    return render_template('class2.html', classe=classe,
+    return render_template('class.html', classe=classe,
                             criteria=criteria, classes_count = classes_count,
                             adding = adding)
 

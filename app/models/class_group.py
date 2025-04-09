@@ -1,7 +1,10 @@
 from app import db
-import random
-from sqlalchemy import func, delete
 from app.models.point import Point
+
+import random
+from dataclasses import dataclass
+from sqlalchemy import func, delete
+
 
 class ClassGroup(db.Model):
     __tablename__ = 'class_groups'
@@ -46,17 +49,18 @@ class ClassGroup(db.Model):
     def __repr__(self):
         return f'<ClassGroup {self.name}>'
     
-# Use in main.py and admin.py top classes 
+# Use in main.py and admin.py top classes
+@dataclass
 class School_classes:
-            def __init__(self, name: str, id: int, place: int, activity: float):
-                self.name = name
-                self.id = id
-                self.place = place
-                self.activity = activity
+    name: str
+    id: int
+    age_group: str
+    place: int
+    activity: float
 
 # Use in main.py /class 
 class Comment:
-        def __init__(self, value, author, description):
-            self.value = value
-            self.author = author
-            self.description = description
+    def __init__(self, value, author, description):
+        self.value = value
+        self.author = author
+        self.description = description

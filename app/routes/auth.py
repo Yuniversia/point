@@ -3,7 +3,7 @@ from config import Login_conf
 
 from datetime import timedelta
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from flask_login import current_user, login_user, logout_user
 from sqlalchemy import desc
 
@@ -19,6 +19,7 @@ def login():
         
         if user and User.check_password(user.password_hash, password):
             login_user(user, duration=timedelta(seconds=Login_conf.login_time))
+            session.permanent = True
             return redirect(url_for('admin.main'))
         else:
             flash('Nepareizs lietotajs vai parole', 'error')

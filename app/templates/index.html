@@ -5,121 +5,283 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gada klase</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
 </head>
 <body>
     <input type="checkbox" id="modal-toggle" class="modal-toggle" hidden>
     
-    <nav class="navbar">
-        <h1 style="color: #2c3e50;">J5vsk</h1>
-        <label for="modal-toggle" class="login-btn">Ieiet</label>
-    </nav>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <h1 style="color: #2c3e50;">J5vsk</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link"><i class="fas fa-home"></i> Sākums</a>
+                <a href="#footer" class="nav-link"><i class="fas fa-info-circle"></i> Par mums</a>
+                <a href="#new" class="nav-link"><i class="fas fa-bell"></i> Jaunumi</a>
+            </div>
+            <label for="modal-toggle" class="login-btn"><i class="fas fa-sign-in-alt"></i> Ieiet</label>
+        </nav>
+    </header>
+    
+    <section class="ranking-section">
+            <h2 class="section-title"><i class="fas fa-medal"></i> Top 3 klases pēc aktivitaties</h2>
+            
+            <div class="section-description">
+                <p>Skatiet labākās klases, kas aktīvi piedalās skolas pasākumos un gūst panākumus</p>
+            </div>
+
+            <div class="places-container">
+                {% if top_clases is not none %}
+                    {% for class in top_clases %}
+                        {% if loop.index0 == 0 %}
+                            <div class="first-place" onclick="window.location.href='class?id={{class.id}}'">
+                                <div class="trophy-icon"><i class="fas fa-trophy"></i></div>
+                                <div class="place-number" style="width: 0; margin: auto;">1</div>
+                                <h3>Klase {{ class.name }}</h3>
+                                <div class="activity-meter">
+                                    <div class="activity-bar" style="width: {{ ( class.activity | float / top_clases[0].activity | float ) * 100 }}%"></div>
+                                </div>
+                                <p>Aktivitāte: {{ class.activity }}</p>
+                                <div class="achievement-badges">
+                                    <span class="badge"><i class="fas fa-star"></i> Līderis</span>
+                                    <span class="badge"><i class="fas fa-award"></i> Top klase</span>
+                                </div>
+                            </div>
+                        {% elif loop.index0 < 3 %}  
+                            <div class="other-places" onclick="window.location.href='class?id={{class.id}}'">
+                                <div class="place-card">
+                                    <div class="place-number">{{ loop.index }}</div>
+                                    <div class="place-content">
+                                        <h3>Klase {{ class.name }}</h3>
+                                        <div class="activity-meter small">
+                                            <div class="activity-bar" style="width: {{ ( class.activity |float  / top_clases[0].activity | float ) * 100 }}%"></div>
+                                        </div>
+                                        <p>Aktivitāte: {{ class.activity }}</p>
+                                        <div class="achievement-badges">
+                                            {% if loop.index == 2 %}
+                                            <span class="badge silver"><i class="fas fa-medal"></i> Sudrabs</span>
+                                            {% elif loop.index == 3 %}
+                                            <span class="badge bronze"><i class="fas fa-medal"></i> Bronza</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="no-data-message">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Pašlaik nav pieejamu datu par klašu aktivitātēm</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+    <div class="hero-banner">
+        <div class="hero-content">
+            <h2>Klašu aktivitātes reitings</h2>
+            <p>Sekojiet līdzi klašu panākumiem un aktivitātēm visas skolas ietvaros</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>15+ Klases</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-trophy"></i>
+                    <span>300 Euro</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>8+ Aktivitātes</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
+            <div class="alert alert-{{ category }}">
+                <i class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                {{ message }}
+            </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
 
     <main>
-        <section class="ranking-section">
-            <h2 class="section-title">Top 3 klases pēc aktivitaties</h2>
-            <div class="places-container">
-
-                {{top_clases.name}}
-
-                {% if top_clases %}
-                    {% for class in top_clases %}
-
-                        {% if loop.index0 == 0 %}
-                            <div class="first-place">
-                                <div class="place-number">1</div>
-                                <h3>Klase {{ class.name }}</h3>
-                                <p>Aktivitāte: {{ class.activity }}</p>
-                            </div>
-
-                        {% elif loop.index0 < 3 %}  
-                    
-                        <div class="other-places">
-
-                            <div class="place-card">
-                                <div class="place-number">{{ loop.index }}</div>
-                                <div>
-                                    <h3>Klase {{ class.name }}</h3>
-                                    <p>Aktivitāte: {{ class.activity }}</p>
-                                </div>
-                            </div>
-
-                        {% endif %}
-
-                    {% endfor %}
-
-                {% endif %} 
-                    <!-- <div class="place-card">
-                        <div class="place-number">3</div>
-                        <div>
-                            <h3>Класс </h3>
-                            <p>Количество пунктов: </p>
-                        </div>
-                    </div> -->
-                    </div>
-            </div>
-        </section>
-
         <section class="controls">
-            <h2 class="section-title">Mainīt kategoriju</h2>
+            <h2 class="section-title"><i class="fas fa-sliders-h"></i> Mainīt kategoriju</h2>
+            <div class="controls-description">
+                <p>Izvēlieties vecuma grupu, kuras klašu rezultātus vēlaties apskatīt</p>
+            </div>
             <div class="select-group">
                 <form method="GET" action="{{ url_for('main.index') }}" style="display: flex; justify-content: center; width: 100%;">
-                    <select name="group" onchange="this.form.submit()">
-                        <option value="young" {% if group == 'young' %}selected{% endif %}>Junioru grupa</option>
-                        <option value="old" {% if group == 'old' %}selected{% endif %}>Vecākā grupa</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <i class="fas fa-filter select-icon"></i>
+                        <select name="group" onchange="this.form.submit()">
+                            <option value="young" {% if group == 'young' %}selected{% endif %}>Junioru grupa</option>
+                            <option value="old" {% if group == 'old' %}selected{% endif %}>Vecākā grupa</option>
+                        </select>
+                    </div>
                 </form>
             </div>
 
-            <h2 class="section-title">Izveleties klasi</h2>
+            <h2 class="section-title"><i class="fas fa-users"></i> Izveleties klasi</h2>
+            <div class="controls-description">
+                <p>Detalizētas informācijas apskatei izvēlieties konkrētu klasi</p>
+            </div>
             <div class="select-group">
                 <form method="GET" action="/class" style="display: flex; justify-content: center; width: 100%;">
-                    <select name="id" onchange="this.form.submit()">
-                        {% for class in classes %}
-                            <option value="{{ class.id }}">{{ class.name }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="select-wrapper">
+                        <i class="fas fa-school select-icon"></i>
+                        <select name="id" onchange="this.form.submit()">
+                            {% for class in classes %}
+                                <option value="{{ class.id }}">{{ class.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </form>
             </div>
 
             <div class="action-buttons">
                 <form action="/grafik">
-                    <input type="submit" class="action-btn" value="Dežures grafiks">
+                    <button type="submit" class="action-btn"><i class="fas fa-calendar"></i> Dežures grafiks</button>
                 </form>
                 <form action="/criterion">
-                    <input type="submit" class="action-btn" value="Vertešanas kriteriji">
+                    <button type="submit" class="action-btn"><i class="fas fa-list-check"></i> Vertešanas kriteriji</button>
                 </form>
             </div>
         </section>
+
+        <section class="info-cards">
+            <div class="info-card">
+                <i class="fas fa-chart-line info-icon"></i>
+                <h3>Aktivitāšu statistika</h3>
+                <p>Sekojiet līdzi klašu progresu un sasniegumiem visa mācību gada garumā</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-calendar-alt info-icon"></i>
+                <h3>Gaidāmie notikumi</h3>
+                <p>Būsiet informēti par visiem gaidāmajiem skolas pasākumiem un aktivitātēm</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-user-graduate info-icon"></i>
+                <h3>Klases profils</h3>
+                <p>Detalizēta informācija par katras klases aktivitātēm un sasniegumiem</p>
+            </div>
+        </section>
+
+        <section class="timeline-section" id="new">
+            <h2 class="section-title"><i class="fas fa-history"></i> Jaunākie notikumi</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">15. Apr</div>
+                    <div class="timeline-content">
+                        <h3>Skolas konkursa noslēgums</h3>
+                        <p>Notika ikgadējā skolas konkursa noslēguma ceremonija</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">10. Apr</div>
+                    <div class="timeline-content">
+                        <h3>Sporta diena</h3>
+                        <p>Skolā notika sporta diena, kurā piedalījās visas klases</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">5. Apr</div>
+                    <div class="timeline-content">
+                        <h3>Mākslas izstāde</h3>
+                        <p>Skolas aulā tika atklāta skolēnu mākslas darbu izstāde</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <footer class="site-footer" id="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Par mums</h3>
+                <p>Skolas aktivitāšu reitinga sistēma, kas veicina klašu savstarpējo konkurenci un aktivitāti</p>
+            </div>
+            <div class="footer-column">
+                <h3>Saites</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Sākums</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Noteikumi</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Kontakti</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Atgriezeniskā saite </a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Kontakti</h3>
+                <p onclick="window.location.href ='mailto:5vsk@izglitiba.jelgava.lv' "><i class="fas fa-envelope"></i> 5vsk@izglitiba.jelgava.lv</p>
+                <p onclick="window.location.href ='tel:+37163026073' "><i class="fas fa-phone"></i> +371 63026073</p>
+                <p onclick="window.location.href='https://maps.app.goo.gl/Won76Hfny4NVxjVo8'"><i class="fas fa-map-marker-alt"></i> Aspazijas iela 20, Jelgava</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 J5vsk. Visas tiesības aizsargātas.</p>
+            <div class="social-icons">
+                <a href="https://lv-lv.facebook.com/j5vsk" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/jelgavas_5vsk?igsh=d3Uxdnh6cTExZXRj" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/channel/UC7pCfPGddd3HadBnxzlXQAA" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
 
     <!-- Модальное окно -->
     <div class="modal">
         <label class="modal-overlay" for="modal-toggle"></label>
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Admin panele</h2>
+                <h2><i class="fas fa-user-shield"></i> Admin panele</h2>
                 <label class="modal-close" for="modal-toggle">&times;</label>
             </div>
             <form class="auth-form" method="POST" action="{{url_for('login.login')}}">
                 <div class="form-group">
-                    <label>Username</label>
+                    <label><i class="fas fa-user"></i> Username</label>
                     <input type="text" placeholder="Iievadiet jusu username" name="username" class="form-input">
                 </div>
                 <div class="form-group">
-                    <label>Parole</label>
+                    <label><i class="fas fa-lock"></i> Parole</label>
                     <input type="password" placeholder="Iievadet paroli" name="password" class="form-input">
                 </div>
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Atcerēties mani</label>
+                </div>
                 <input class="login-submit-btn" type="submit" value="Ieiet">
+                <div class="form-footer">
+                    <a href="#" class="forgot-password">Aizmirsu paroli?</a>
+                </div>
             </form>
         </div>
     </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    currentDate: new Date().toLocaleDateString('lv-LV')
+                }
+            },
+            mounted() {
+                // Можно добавить анимацию или другие эффекты при загрузке страницы
+                const rankingCards = document.querySelectorAll('.place-card, .first-place');
+                rankingCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animated');
+                    }, index * 200);
+                });
+            }
+        }).mount('body');
+    </script>
 </body>
 </html>

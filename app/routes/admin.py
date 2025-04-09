@@ -72,7 +72,7 @@ def add_point():
         db.session.add(point_class)
         db.session.commit()
 
-        max_point_cashing()
+        max_point_cashing(group)
         cashing_top_by_group(group)
 
         flash('Punkti bija veiksmīgi pievienoti', 'success')
@@ -204,7 +204,8 @@ def criteria():
     percentages = []
     sum = Category.coefficient_sum()
 
-    max_point_cashing()
+    max_point_cashing("young")
+    max_point_cashing("old")
     cashing_top_by_group("young")
     cashing_top_by_group("old")
 

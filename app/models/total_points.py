@@ -9,6 +9,7 @@ class Total_point(db.Model):
     total_point = db.Column(db.Integer)
 
     category = db.relationship('Category', backref='total_point')
+    classe = db.relationship('ClassGroup', backref='total_points', foreign_keys=[class_id])
 
     def __init__(self, category_id: int, class_id: int, point: int = 0):
         self.category_id = category_id

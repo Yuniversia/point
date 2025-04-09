@@ -11,14 +11,14 @@ r = redis.Redis(host=Config.REDIS_HOST, port=Config.REDIS_PORT, decode_responses
 
 # thread = Thread(target=my_func, args=('args'))
 
-def max_point_cashing():
+def max_point_cashing(group):
     for criterion in Category.query.all():
-        max_point = Total_point.query.filter_by(category_id=criterion.id).order_by(desc(Total_point.total_point)).first()
+        max_point = Total_point.query.filter(Total_point.category_id == criterion.id).filter(Total_point.classe.has(age_group=group)).order_by(desc(Total_point.total_point)).first()
         if not max_point:
             max_point = 0
         else:
             max_point = max_point.total_point
-        r.set(f'{criterion.name}', max_point)
+        r.set(f'{group}_{criterion.name}', max_point)
 
     return True
 
@@ -31,7 +31,7 @@ def cashing_top_by_group(group):
         activ_list = []
 
         for criterion in criteria:
-            max_point = r.get(f'{criterion.name}') # Get data from redis to optimize code
+            max_point = r.get(f'{group}_{criterion.name}') # Get data from redis to optimize code
             point = Total_point.query.filter_by(category_id=criterion.id, class_id=school_class.id).one_or_none()
             if point and max_point and int(max_point) != 0:
                 activity = point.total_point / int(max_point)
@@ -55,6 +55,7 @@ def cashing_top_by_group(group):
         classe = ClassGroup.query.filter_by(age_group=group, name=key).one()
         mapping = {"name": key,
                    "id": classe.id,
+                   "age_group": group,
                    "place": place,
                    "activity": value}
         r.hset(key, mapping=mapping)

@@ -4,6 +4,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = 'app/static/images/uploads/'
     ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+    PERMANENT_SESSION_LIFETIME = 7200 # 2 hour in seconds
 
     IP = "127.0.0.1"
     PORT = 2000

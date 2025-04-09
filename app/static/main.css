@@ -1,308 +1,1301 @@
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
 
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-        }
+body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    position: relative;
+    color: #2c3e50;
+}
+
+/* Навбар */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+    color: #28a745;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.login-btn {
+    background: #28a745;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+/* Hero Banner */
+.hero-banner {
+    background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), 
+                url('/api/placeholder/1600/400') center/cover no-repeat;
+    color: white;
+    text-align: center;
+    padding: 4rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    min-width: 120px;
+}
+
+.stat-item i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #28a745;
+}
+
+/* Модальное окно */
+.modal-toggle { display: none; }
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-toggle:checked ~ .modal {
+    display: flex;
+}
+
+.modal-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    animation: modalAppear 0.3s ease;
+    z-index: 1001;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #f1f1f1;
+    padding-bottom: 1rem;
+}
+
+.modal-header h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #495057;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.form-input {
+    padding: 1rem;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.forgot-password {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-decoration: none;
+    align-self: center;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+    color: #28a745;
+}
+
+.form-footer {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.login-submit-btn {
+    background: #28a745;
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-submit-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+@keyframes modalAppear {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Секция с рейтингом */
+.ranking-section {
+    padding: 3rem 5%;
+    text-align: center;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin: 3rem 5% 3rem;
+}
+
+.section-title {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.section-description, .controls-description {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: #6c757d;
+}
+
+.places-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.first-place {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(40, 167, 69, 0.15);
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    margin-bottom: 2rem;
+    border: 2px solid rgba(40, 167, 69, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.first-place:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(40, 167, 69, 0.2);
+}
+
+.trophy-icon {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #28a745;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.other-places {
+    display: grid;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+    cursor: pointer;
+}
+
+.place-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid #f1f1f1;
+}
+
+.place-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.place-content {
+    flex: 1;
+}
+
+.place-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    min-width: 50px;
+    height: 50px;
+    background: rgba(40, 167, 69, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activity-meter {
+    height: 10px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 5px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.activity-meter.small {
+    height: 6px;
+    margin: 0.5rem 0;
+}
+
+.activity-bar {
+    height: 100%;
+    background: #28a745;
+    border-radius: 5px;
+}
+
+.achievement-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.badge {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.badge.silver {
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+.badge.bronze {
+    background: rgba(176, 132, 59, 0.1);
+    color: #b0843b;
+}
+
+.no-data-message {
+    background: rgba(108, 117, 125, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+.no-data-message i {
+    font-size: 3rem;
+    color: #6c757d;
+}
+
+/* Info Cards */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 5% 3rem;
+}
+
+.info-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: all 0.3s ease;
+    border-top: 4px solid #28a745;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.info-icon {
+    font-size: 2.5rem;
+    color: #28a745;
+    margin-bottom: 1rem;
+}
+
+.info-card h3 {
+    margin-bottom: 1rem;
+}
+
+.info-card p {
+    color: #6c757d;
+}
+
+/* Управление */
+.controls {
+    padding: 3rem 5%;
+    background: white;
+    margin: 3rem 5%;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.select-group {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.select-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #28a745;
+    pointer-events: none;
+}
+
+select {
+    width: 100%;
+    padding: 1rem 1rem 1rem 40px;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    background: white;
+    font-size: 1rem;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.select-wrapper::after {
+    content: '\f107';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #28a745;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.action-btn {
+    background: #28a745;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+.action-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+/* Timeline Section */
+.timeline-section {
+    padding: 3rem 5%;
+    margin: 3rem 5%;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 2rem auto 0;
+    padding: 2rem 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 120px;
+    width: 3px;
+    background: #28a745;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 150px;
+    margin-bottom: 2.5rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-date {
+    position: absolute;
+    left: 0;
+    width: 100px;
+    text-align: right;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    position: relative;
+}
+
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: -30px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #28a745;
+    box-shadow: 0 0 0 4px white;
+}
+
+.timeline-content h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+/* Footer */
+.site-footer {
+    background: #2c3e50;
+    color: white;
+    padding: 3rem 5% 1rem;
+    margin-top: 5rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-column h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    position: relative;
+    padding-bottom: 0.7rem;
+}
+
+.footer-column p {
+    cursor: pointer;
+}
+
+.footer-column h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: #28a745;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #e9ecef;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-links a:hover {
+    color: #28a745;
+}
+
+.footer-column p {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-column i {
+    width: 20px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+}
+
+.social-icon:hover {
+    background: #28a745;
+    transform: translateY(-3px);
+}
+
+/* Уведомления */
+.alert {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 300px;
+    max-width: 80%;
+    text-align: center;
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    animation: fadeInOut 5s forwards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border-left: 5px solid #155724;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid #721c24;
+}
+
+@keyframes fadeInOut {
+    0% {opacity: 0; transform: translate(-50%, -20px);}
+    10% {opacity: 1; transform: translate(-50%, 0);}
+    90% {opacity: 1; transform: translate(-50%, 0);}
+    100% {opacity: 0; transform: translate(-50%, -20px);}
+}
+
+/* Анимации */
+.animated {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .hero-content h2 {
+        font-size: 2rem;
+    }
+    
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-item {
+        padding-left: 70px;
+    }
+    
+    .timeline-date {
+        width: auto;
+        left: 70px;
+        top: -30px;
+        text-align: left;
+    }
+    
+    .timeline-content::before {
+        left: -40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-stats {
+        gap: 1rem;
+    }
+    
+    .info-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .other-places { 
+        grid-template-columns: 1fr; 
+    }
+    
+    .first-place { 
+        max-width: 100%; 
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 1.5rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .nav-link {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.9rem;
+    }
+    
+    .place-card {
+        padding: 1rem;
+    }
+    
+    .action-btn {
+        padding: 0.8rem 1.5rem;
+    }
+}
+
+/* Дополнительные улучшения */
+::selection {
+    background-color: rgba(40, 167, 69, 0.3);
+    color: #2c3e50;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #28a745;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #218838;
+}
+
+/* Интерактивные элементы */
+button, select, input[type="submit"] {
+    outline: none;
+}
+
+input[type="checkbox"] {
+    accent-color: #28a745;
+}
+
+/* Эффекты при наведении */
+.hover-lift {
+    transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+/* Эффект волны при клике на кнопку */
+.action-btn, .login-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.action-btn:after, .login-btn:after {
+    content: "";
+    background: rgba(255, 255, 255, 0.3);
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    padding-top: 240%;
+    padding-left: 240%;
+    margin-top: -120%;
+    margin-left: -120%;
+    opacity: 0;
+    transition: all 0.8s;
+}
+
+.action-btn:active:after, .login-btn:active:after {
+    padding-top: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-left: 0;
+    opacity: 1;
+    transition: 0s;
+}
 
 
-        /* Навбар */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            background: #ffffff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: relative;
-        }
+/* Class.html styles */
 
-        .login-btn {
-            background: #28a745;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+/* new_style.css */
 
-        .login-btn:hover {
-            transform: translateY(-2px);
-        }
+/* Общий контейнер для страницы */
+.page-container {
+    padding: 2rem 5%; /* Используем отступы как в main2.css */
+    max-width: 1200px; /* Ограничим максимальную ширину для лучшей читаемости */
+    margin: 0 auto; /* Центрируем контейнер */
+}
 
-        /* Модальное окно */
-        .modal-toggle { display: none; }
+/* Стилизация хедера класса */
+.class-header-card {
+    /* Используем стили .info-card из main2.css как базу */
+    /* Дополнительные или переопределяющие стили здесь */
+    background: linear-gradient(135deg, #ffffff, #f0f3f5); /* Небольшой градиент */
+    border-left: 5px solid #28a745; /* Акцентная линия */
+    text-align: center;
+    margin-bottom: 3rem;
+}
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
+.class-header-card h2 {
+    font-size: 2rem; /* Крупнее заголовок */
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
 
-        .modal-toggle:checked ~ .modal {
-            display: flex;
-        }
+.class-subtitle {
+    color: #6c757d;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
 
-        .modal-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            cursor: pointer;
-        }
+.stats-grid-revamped {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Адаптивная сетка */
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef; /* Разделитель */
+}
 
-        .modal-content {
-            position: relative;
-            background: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
-            animation: modalAppear 0.3s ease;
-            z-index: 1001;
-        }
+.stat-item-revamped {
+    background: rgba(40, 167, 69, 0.05); /* Легкий фон */
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+.stat-item-revamped:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
 
-        .modal-header h2 {
-            color: #2c3e50;
-            font-size: 2rem;
-        }
+.stat-icon {
+    font-size: 2rem;
+    color: #28a745;
+    margin-bottom: 0.75rem;
+    display: block; /* Иконка над текстом */
+}
 
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 2.5rem;
-            cursor: pointer;
-            color: #6c757d;
-            transition: color 0.2s;
-        }
+.stat-value {
+    font-size: 1.6rem; /* Крупнее значение */
+    color: #2c3e50; /* Темнее цвет значения */
+    margin-bottom: 0.5rem;
+}
 
-        .modal-close:hover {
-            color: #495057;
-        }
+.stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
 
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
+/* Секция критериев */
+.criteria-section {
+    margin-bottom: 3rem;
+}
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+.criteria-list {
+    display: grid;
+    gap: 1.5rem; /* Пространство между карточками */
+}
 
-        .form-input {
-            padding: 1rem;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
+/* Карточка критерия */
+.criteria-item-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+    overflow: hidden; /* Чтобы скрыть контент до раскрытия */
+    transition: box-shadow 0.3s ease;
+    transform: translateY(20px); /* Начальное состояние для анимации */
+    transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
+}
 
-        .form-input:focus {
-            outline: none;
-            border-color: #28a745;
-        }
+.criteria-item-card:hover {
+     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
 
-        .forgot-password {
-            align-self: flex-end;
-            color: #6c757d;
-            font-size: 0.9rem;
-            text-decoration: none;
-        }
+/* Прячем стандартный чекбокс */
+.criteria-toggle {
+    display: none;
+}
 
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
+/* Шапка критерия (Лейбл для чекбокса) */
+.criteria-header-revamped {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    background: #f8f9fa; /* Светлый фон для шапки */
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #eee; /* Тонкая линия под шапкой */
+}
 
-        .login-submit-btn {
-            background: #28a745;
-            color: white;
-            padding: 1rem;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-        }
+.criteria-header-revamped:hover {
+    background-color: #f1f3f5; /* Немного темнее при наведении */
+}
 
-        .login-submit-btn:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
+.criteria-title {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    flex: 1; /* Занимает доступное пространство */
+    margin-right: 1rem;
+}
 
-        @keyframes modalAppear {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
+.criteria-icon {
+    color: #28a745;
+    font-size: 1.2rem;
+}
 
-        @media (max-width: 480px) {
-            .modal-content {
-                padding: 1.5rem;
-            }
-            
-            .modal-header h2 {
-                font-size: 1.5rem;
-            }
-        }
+.criteria-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0; /* Не сжиматься */
+}
 
-        /* Секция с рейтингом */
-        .ranking-section {
-            padding: 3rem 5%;
-            text-align: center;
-        }
+/* Иконка раскрытия */
+.expand-icon {
+    font-size: 1rem;
+    color: #6c757d;
+    transition: transform 0.3s ease;
+}
 
-        .places-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
+/* Поворот иконки при раскрытии */
+.criteria-toggle:checked + .criteria-header-revamped .expand-icon {
+    transform: rotate(180deg);
+}
 
-        .first-place {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 500px;
-            position: relative;
-            margin-bottom: 2rem;
-        }
+/* Добавляем классы для бейджей (могут быть и в main2.css, но добавим тут для примера) */
+.badge-gold { background: rgba(255, 193, 7, 0.15); color: #b0843b; } /* Используем цвета из main2.css для согласованности */
+/* .badge-silver { background: rgba(108, 117, 125, 0.1); color: #6c757d; } */ /* Уже есть в main2.css */
+/* .badge-bronze { background: rgba(176, 132, 59, 0.1); color: #b0843b; } */ /* Уже есть в main2.css */
 
-        .other-places {
-            display: grid;
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 800px;
-        }
+/* Контент критерия */
+.criteria-content-revamped {
+    display: none; /* Скрыт по умолчанию */
+    padding: 1.5rem 2rem; /* Больше отступов */
+    border-top: 1px solid #eee;
+    animation: slideDown 0.4s ease-out; /* Анимация появления */
+}
 
-        .place-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            display: flex;
-            align-items: center;
-            text-align: left;
-            gap: 1rem;
-        }
+.criteria-toggle:checked ~ .criteria-content-revamped {
+    display: block; /* Показываем при активации чекбокса */
+}
 
-        .place-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #28a745;
-            min-width: 50px;
-        }
+/* Анимация раскрытия */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 1000px; /* Достаточно большое значение */
+    }
+}
 
-        /* Управление */
-        .controls {
-            padding: 2rem 5%;
-            background: rgba(255,255,255,0.9);
-            margin-top: 3rem;
-            border-radius: 15px 15px 0 0;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
-        }
+.progress-section {
+    margin-bottom: 2rem;
+}
 
-        .select-group {
-            margin: 2rem 0;
-            display: flex;
-            justify-content: center;
-        }
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
 
-        select {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #28a745;
-            border-radius: 8px;
-            background: white;
-            font-size: 1rem;
-            max-width: 400px;
-            margin: 0.5rem 0;
-        }
+/* Стилизация таблицы деталей */
+.details-title {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #28a745;
+    display: inline-block; /* Чтобы подчеркивание было по ширине текста */
+}
 
-        .section-title {
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-            text-align: center;
-        }
+.table-responsive {
+    overflow-x: auto; /* Горизонтальная прокрутка для маленьких экранов */
+    margin-bottom: 1.5rem;
+}
 
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
+.details-table-revamped {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
 
-        .action-btn {
-            background: #28a745;
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+.details-table-revamped th,
+.details-table-revamped td {
+    padding: 0.9rem 1rem;
+    border: 1px solid #e9ecef; /* Светлые границы */
+    text-align: left;
+    vertical-align: middle; /* Выравнивание по центру */
+}
 
-        .action-btn:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
+.details-table-revamped thead th {
+    background-color: #f8f9fa; /* Фон заголовков */
+    font-weight: 600; /* Жирнее */
+    color: #495057;
+    white-space: nowrap; /* Запрет переноса */
+}
 
-        @media (max-width: 768px) {
-            .other-places { grid-template-columns: 1fr; }
-            .first-place { max-width: 100%; }
-        }
+.details-table-revamped th i {
+    margin-right: 0.5rem; /* Отступ у иконок в заголовках */
+    color: #28a745;
+}
 
-        /* Уведомления */
-        .alert {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            text-align: center;
-            pointer-events: none;
+.details-table-revamped tbody tr:nth-child(even) {
+    background-color: #fdfdfe; /* Чередование строк (очень светлое) */
+}
 
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-            animation: fadeOut 3s forwards;
-            animation-delay: 2s;
-        }
+.details-table-revamped tbody tr:hover {
+    background-color: #f1f3f5; /* Подсветка строки при наведении */
+}
 
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-        }
+.no-details {
+    color: #6c757d;
+    font-style: italic;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    text-align: center;
+}
 
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-        }
+/* Дата последнего обновления */
+.last-updated {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e0e0e0;
+    font-size: 0.85rem;
+    color: #868e96;
+    text-align: right;
+}
 
-        @keyframes fadeOut {
-            from {opacity: 1;}
-            to {opacity: 0;}
-        }
+.last-updated i {
+    margin-right: 0.4rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 1.5rem 3%;
+    }
+
+    .class-header-card h2 {
+        font-size: 1.6rem;
+    }
+
+    .stats-grid-revamped {
+        grid-template-columns: 1fr; /* Статистика в один столбец */
+        gap: 1rem;
+    }
+
+    .criteria-header-revamped {
+        flex-direction: column; /* Шапка критерия в столбец */
+        align-items: flex-start; /* Выравнивание по левому краю */
+        gap: 0.8rem;
+    }
+
+    .criteria-summary {
+        align-self: flex-end; /* Бейджи и стрелка справа */
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .criteria-content-revamped {
+        padding: 1rem 1.2rem;
+    }
+
+    .details-table-revamped th,
+    .details-table-revamped td {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+     .class-header-card h2 {
+        font-size: 1.4rem;
+    }
+    .stat-value {
+        font-size: 1.4rem;
+    }
+    .criteria-title {
+        font-size: 1rem;
+    }
+     .details-table-revamped th,
+    .details-table-revamped td {
+        font-size: 0.85rem;
+    }
+}
+
+/* Дополнительные стили для информационных карточек (если они не полностью покрыты main2.css) */
+.info-cards {
+    /* Используем стили из main2.css */
+    margin-top: 3rem; /* Добавим отступ сверху */
+}

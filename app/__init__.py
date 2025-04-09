@@ -52,7 +52,8 @@ def create_app(config_class=Config):
         # Cashing data in redis after reboot
         from app.models.cashing import cashing_top_by_group, max_point_cashing
 
-        max_point_cashing()
+        max_point_cashing("young")
+        max_point_cashing("old")
         cashing_top_by_group("young")
         cashing_top_by_group("old")
     
