@@ -33,7 +33,7 @@ def main(group):
         filtered_classes = []
         for i in top:
             cl = r.hgetall(i)
-            filtered_classes.append(School_classes(cl["name"], cl["id"], cl["place"], cl["activity"]))
+            filtered_classes.append(School_classes(cl["name"], cl["id"], cl["age_group"], cl["place"], cl["activity"]))
 
         return render_template('admin/admin.html', group=group, user=user, classes = classes, criteria=criteria, filtered_classes=filtered_classes)
     
@@ -115,7 +115,7 @@ def upload_file():
 def user():
     user = User.query.filter_by(id=current_user.id).first()
 
-    return render_template('admin/user.html', user=user)
+    return render_template('admin/user.html', user=user), 302
 
 @admin_bp.route("user/username", methods=['POST'])
 @login_required
@@ -166,7 +166,7 @@ def school_class():
     else:
         group = request.args.get('group', default=None, type=str)
         if group == None:
-            return redirect(url_for('admin.school_class') + "?group=young")
+            return redirect(url_for('admin.school_class') + "?group=young"), 302
 
         user = User.query.filter_by(id=current_user.id).first()
         classes = ClassGroup.query.filter_by(age_group=group).order_by(ClassGroup.name).all()
@@ -204,11 +204,6 @@ def criteria():
     percentages = []
     sum = Category.coefficient_sum()
 
-    max_point_cashing("young")
-    max_point_cashing("old")
-    cashing_top_by_group("young")
-    cashing_top_by_group("old")
-
     for i in criteria:
         value = (i.coefficient / sum) * 100
         percentages.append(round(value, 2))
@@ -234,6 +229,11 @@ def add_criteria():
     db.session.add(criteria)
     db.session.commit()
 
+    max_point_cashing("young")
+    max_point_cashing("old")
+    cashing_top_by_group("young")
+    cashing_top_by_group("old")
+
     flash('Kriterijs bija veiksmīgi pievienots', 'success')
     return redirect(url_for('admin.criteria')), 302
 
@@ -244,18 +244,45 @@ def change_criteria():
         flash("Jūms nav tiesību", "error")
         return redirect(request.url)
 
+    id = request.form.get('id')
     name = request.form.get('name')
     coefficient = request.form.get('coefficient')
 
-    criteria = Category.query.filter_by(name=name).first()
-    print(criteria)
+    criteria = Category.query.filter_by(id=id).first()
 
     criteria.name = name
     criteria.coefficient = coefficient
 
     db.session.commit()
 
+    max_point_cashing("young")
+    max_point_cashing("old")
+    cashing_top_by_group("young")
+    cashing_top_by_group("old")
+
     flash('Kriterijs bija veiksmīgi rediģets', 'success')
+    return redirect(url_for('admin.criteria')), 302
+
+@admin_bp.route("/criteria/delete", methods=['POST'])
+@login_required
+def delete_criteria():
+    if not current_user.adding_category:
+        flash("Jūms nav tiesību", "error")
+        return redirect(request.url)
+
+    id = request.form.get('id')
+
+    criteria = Category.query.filter_by(id=id).first()
+
+    db.session.delete(criteria)
+    db.session.commit()
+
+    max_point_cashing("young")
+    max_point_cashing("old")
+    cashing_top_by_group("young")
+    cashing_top_by_group("old")
+
+    flash('Kriterijs bija veiksmīgi dzēsts', 'success')
     return redirect(url_for('admin.criteria')), 302
 
 @admin_bp.route('/administration')

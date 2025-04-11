@@ -15,7 +15,8 @@ class ClassGroup(db.Model):
     
     # Отношения
     points = db.relationship('Point', backref='class_group', lazy='dynamic', cascade="all, delete")
-    total_point = db.relationship('Total_point', backref='class_group', lazy='dynamic', cascade="all, delete")
+    # Отношение один ко многим из-за uselist
+    total_point = db.relationship('Total_point', back_populates='class_group', cascade="all, delete-orphan")
 
     def __init__(self, name: str, age_group: str):
         self.name = name
@@ -25,26 +26,6 @@ class ClassGroup(db.Model):
     def class_by_group(group):
         res = db.session.query(ClassGroup).filter_by(age_group=group).all()
         return res
-    
-    @staticmethod
-    def total_points_by_category(class_id: int, category_id: int):
-        # return sum(point.value for point in self.points)
-        # return random.randint(0, 150)
-        sum = 0
-        for point in Point.query.filter(class_id=class_id, category_id=category_id).all():
-            sum += point.value
-        
-        return sum
-    
-    def points_by_category(self):
-        # Возвращает словарь {категория_id: сумма_баллов}
-        result = {}
-        for point in self.points:
-            if point.category_id in result:
-                result[point.category_id] += point.value
-            else:
-                result[point.category_id] = point.value
-        return result
     
     def __repr__(self):
         return f'<ClassGroup {self.name}>'

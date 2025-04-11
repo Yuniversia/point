@@ -10,7 +10,7 @@ class Point(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('class_groups.id'), nullable=False)
     value = db.Column(db.Integer, nullable=False)
     # category_id внешний ключ
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime, server_default=func.now())   
     # added_by внешние ключ

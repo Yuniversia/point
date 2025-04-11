@@ -2,14 +2,16 @@ from app import db
 from sqlalchemy import func
 
 class Category(db.Model):
-    __tablename__ = 'categories'
+    __tablename__ = 'category'
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, nullable=False)
     coefficient = db.Column(db.Integer, nullable=False)
     
     # Отношения
-    points = db.relationship('Point', backref='category', lazy='dynamic')
+    points = db.relationship('Point', backref='category', lazy='dynamic', cascade="all, delete")
+    total_point = db.relationship('Total_point', back_populates='category', cascade="all, delete-orphan")
+
 
     def __init__(self, name: str, coefficient: int):
         self.name = name

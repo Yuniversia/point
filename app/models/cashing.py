@@ -13,7 +13,7 @@ r = redis.Redis(host=Config.REDIS_HOST, port=Config.REDIS_PORT, decode_responses
 
 def max_point_cashing(group):
     for criterion in Category.query.all():
-        max_point = Total_point.query.filter(Total_point.category_id == criterion.id).filter(Total_point.classe.has(age_group=group)).order_by(desc(Total_point.total_point)).first()
+        max_point = Total_point.query.filter(Total_point.category_id == criterion.id).filter(Total_point.class_group.has(age_group=group)).order_by(desc(Total_point.total_point)).first()
         if not max_point:
             max_point = 0
         else:

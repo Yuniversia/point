@@ -103,3 +103,8 @@ def grafik():
         flash('Serverim ir problema', 'error')
         return redirect(url_for('main.index'))
     
+@main_bp.route('/assessment')
+def assessment():
+    criteria = Category.query.all()
+    return render_template("assessment.html", criteria=criteria)
+    

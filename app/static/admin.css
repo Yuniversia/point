@@ -1,234 +1,750 @@
-/* Стили из index.html */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-}
+/* --- new_style.css --- */
+/* Предполагается, что основные стили (body, .btn, цвета и т.д.) взяты из main.css */
+/* Стили из блока <style> в adminhtml.txt перенесены и адаптированы сюда */
+
+/* --- Общие стили для админ-панели --- */
 
 body {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    min-height: 100vh;
-    display: flex;
+    display: flex; /* Для работы сайдбара и основного контента */
+    background-color: #f8f9fa; /* Светлый фон для основной области, как в main.css */
 }
 
-/* Боковая панель */
-.sidebar {
-    width: 280px;
-    background: white;
-    padding: 2rem 1.5rem;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    position: fixed;
+/* --- Сайдбар --- */
+.admin-sidebar {
+    width: 260px;
+    background: #2c3e50; /* Темный фон для контраста (из main.css) */
+    color: #e9ecef;
     height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+    z-index: 1010; /* Выше основного контента */
 }
 
-.profile-section {
-    text-align: left;
-    margin-bottom: 2rem;
-}
-
-.profile-section img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+.admin-profile {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 1rem;
 }
 
-.nav-menu {
+.admin-profile .profile-icon {
+    font-size: 4rem;
+    color: #28a745; /* Зеленый акцент (из main.css) */
+    margin-bottom: 0.8rem;
+}
+
+.admin-profile h3 {
+    margin: 0.5rem 0 0.2rem;
+    color: #fff;
+    font-size: 1.1rem;
+    word-break: break-word; /* Перенос длинных имен */
+}
+
+.admin-profile p {
+    font-size: 0.9rem;
+    color: #ced4da;
+    word-break: break-word;
+}
+
+.admin-nav-menu {
     list-style: none;
-    margin: 2rem 0;
-}
-
-.nav-item {
-    padding: 0.8rem;
-    margin: 0.5rem 0;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.exit {
-    color: red;
-    background-color: #ffeeee;
-}
-
-.nav-item:hover {
-    background: #e9ecef;
-}
-
-/* Основной контент */
-.main-content {
-    margin-left: 280px;
-    padding: 2rem;
+    padding: 0;
+    margin: 0;
     flex-grow: 1;
 }
 
-/* Секции */
-.section {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    margin-bottom: 2rem;
+.admin-nav-menu .nav-item {
+    padding: 0.9rem 1.5rem;
+    color: #e9ecef;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-left-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Пространство между иконкой и текстом */
+    font-size: 1rem;
+    border-left: 4px solid transparent; /* Индикатор */
 }
 
-/* Формы */
-.form-group {
+.admin-nav-menu .nav-item i {
+    width: 20px;
+    text-align: center;
+    color: #adb5bd; /* Нейтральный цвет иконок */
+    transition: color 0.2s ease;
+}
+
+.admin-nav-menu .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border-left-color: #28a745; /* Зеленый при наведении */
+}
+
+.admin-nav-menu .nav-item:hover i {
+     color: #28a745;
+}
+
+.admin-nav-menu .nav-item.active {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #fff;
+    font-weight: 500;
+    border-left-color: #28a745; /* Яркий зеленый */
+}
+
+.admin-nav-menu .nav-item.active i {
+    color: #28a745;
+}
+
+.admin-nav-menu .nav-item.exit {
+    margin-top: auto; /* Прижимает кнопку вниз */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffc107; /* Желтый для акцента */
+}
+.admin-nav-menu .nav-item.exit:hover {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left-color: #ffc107;
+}
+.admin-nav-menu .nav-item.exit i {
+    color: #ffc107;
+}
+
+/* --- Основной контент --- */
+.admin-main-content {
+    margin-left: 260px;
+    padding: 2rem;
+    width: calc(100% - 260px);
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* --- Карточки секций --- */
+.admin-section-card {
+    background: #ffffff; /* Белый фон карточек */
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); /* Мягкая тень из main.css */
+    border: 1px solid #e9ecef; /* Тонкая граница */
+}
+
+.section-title {
+    font-size: 1.5rem; /* Чуть меньше для админки */
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #28a745; /* Зеленое подчеркивание */
+    display: inline-flex; /* Используем flex для выравнивания иконки */
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.section-title i {
+    color: #28a745;
+    font-size: 1.4rem; /* Размер иконки в заголовке */
+}
+
+/* --- Формы --- */
+.admin-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.admin-form label {
+    display: flex; /* Используем flex для иконки и текста */
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #495057;
+    font-size: 0.95rem;
+}
+
+.admin-form label i {
+    color: #28a745;
+    width: 16px;
+    text-align: center;
+}
+
+/* Используем .form-control из main.css, но с небольшими админскими правками если нужно */
+.admin-form-control {
+    /* Наследует стили .form-control из adminhtml.txt (перенесены сюда) и main.css */
+    width: 100%; /* Убедимся, что занимает всю ширину */
+    padding: 0.8rem 1rem; /* Увеличенный паддинг */
+    border: 1px solid #ced4da; /* Стандартная граница */
+    border-radius: 8px; /* Скругление */
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fff; /* Явный белый фон */
+    color: #495057; /* Цвет текста */
+}
+
+.admin-form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.15); /* Зеленая тень при фокусе */
+    outline: none;
+}
+
+/* Сетка для формы добавления баллов */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
-input, select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 2px solid #28a745;
-    border-radius: 8px;
-    margin-top: 0.5rem;
+.form-group-full {
+    grid-column: 1 / -1; /* Растягиваем на всю ширину */
 }
 
-/* Таблицы */
-.table {
+.admin-submit-btn {
+    /* Стилизуем на основе .btn и .login-submit-btn из main.css */
+    background-color: #28a745;
+    color: white;
+    padding: 0.9rem 1.8rem;
+    border: none;
+    border-radius: 8px; /* Как у полей ввода */
+    cursor: pointer;
+    font-size: 1.05rem;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.admin-submit-btn:hover {
+    background-color: #218838;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2); /* Тень при наведении */
+}
+
+/* --- Сетка для фильтра и загрузки файлов --- */
+.admin-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Адаптивные колонки */
+    gap: 2rem; /* Пространство между карточками */
+    margin-bottom: 2rem;
+}
+
+/* --- Загрузка файлов --- */
+.file-upload-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Отступ между формами загрузки */
+}
+
+.file-upload-form {
+    display: flex;
+    flex-direction: column; /* Элементы друг под другом */
+    align-items: flex-start; /* Выравнивание по левому краю */
+    gap: 0.5rem;
+}
+
+.btn-file-upload {
+    /* Стилизация под кнопку, похожую на .action-btn из main.css */
+    background: #6c757d; /* Серый цвет для доп. кнопок */
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 20px; /* Более круглые */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+}
+
+.btn-file-upload:hover {
+    background: #5a6268;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.file-info {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-left: 0.5rem;
+}
+
+/* --- Таблица --- */
+.table-responsive-admin {
+    overflow-x: auto; /* Горизонтальная прокрутка для маленьких экранов */
+}
+
+.admin-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 0.95rem;
     margin-top: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Небольшая тень для таблицы */
+    border-radius: 8px; /* Скругление углов (если overflow:hidden для .table-responsive-admin) */
+    overflow: hidden; /* Для скругления углов */
 }
 
-.table th, .table td {
-    padding: 1rem;
+.admin-table th,
+.admin-table td {
+    padding: 1rem 1.2rem; /* Увеличенные отступы */
+    border: 1px solid #e9ecef;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
 }
 
-/* Кнопки */
-.btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
+.admin-table thead th {
+    background-color: #f8f9fa; /* Фон заголовков */
+    font-weight: 600;
+    color: #495057;
+    white-space: nowrap; /* Запрет переноса заголовков */
 }
 
-.btn-primary {
-    background: #28a745;
-    color: white;
+.admin-table thead th i {
+    margin-right: 0.6rem;
+    color: #28a745;
+    font-size: 1rem;
 }
 
-.btn-submit {
-    background: #28a745;
-    color: white;
-    padding: 12px;
+.admin-table tbody tr {
+    transition: background-color 0.2s ease;
 }
 
-.btn-submit:hover {
-    background: #259b40;
-    color: white;
-    padding: 12px;
+.admin-table tbody tr:nth-child(even) {
+    background-color: #fdfdfe; /* Очень светлое чередование */
 }
 
-.btn-danger {
-    background: #dc3545;
-    color: white;
-    width: auto;
+.clickable-table tbody tr {
+    cursor: pointer; /* Стиль из adminhtml.txt */
 }
 
-.btn-danger:hover {
-    background: #c02e3d;
-    color: white;
-    width: auto;
+.clickable-table tbody tr:hover {
+    background-color: #e9f5ec; /* Светло-зеленый при наведении */
 }
 
-/* Уведомления */
-.alert {
-    position: absolute;
-    top: 0;
-    width: auto;
+.no-data {
     text-align: center;
-    pointer-events: none;
+    color: #6c757d;
+    font-style: italic;
+    padding: 1.5rem;
+}
 
-    padding: 1rem;
+.no-data i {
+    margin-right: 8px;
+    color: #6c757d;
+}
+
+/* --- Уведомления (Flash Messages) --- */
+.flash-messages-container {
+    margin-bottom: 1.5rem;
+    /* Позиционирование внутри .admin-main-content */
+}
+.admin-alert {
+    /* Наследует стили .alert из main.css, но можно переопределить позиционирование */
+    position: relative; /* Или static, если не нужно абсолютное позиционирование */
+    top: auto;
+    left: auto;
+    transform: none;
     margin-bottom: 1rem;
-    border-radius: 8px;
-    animation: fadeOut 3s forwards;
-    animation-delay: 2s;
+    width: 100%;
+    text-align: left;
+    border-left-width: 5px; /* Используем рамку слева как в main.css */
+    animation: none; /* Отключаем анимацию fadeInOut если не нужна */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.alert-success {
-    background: #d4edda;
-    color: #155724;
+/* --- Мобильное меню (Бургер) --- */
+.mobile-menu-button.admin-burger {
+    display: none; /* Скрыт по умолчанию на десктопе */
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1011; /* Выше сайдбара */
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-.alert-error {
-    background: #f8d7da;
-    color: #721c24;
-}
-
-@keyframes fadeOut {
-    from {opacity: 1;}
-    to {opacity: 0;}
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .sidebar {
+/* --- Адаптивность --- */
+@media (max-width: 992px) {
+    .admin-sidebar {
+        transform: translateX(-100%); /* Скрываем сайдбар */
+    }
+    .mobile-menu-toggle:checked ~ .admin-sidebar {
+        transform: translateX(0); /* Показываем сайдбар по клику */
+    }
+    .admin-main-content {
+        margin-left: 0; /* Контент занимает всю ширину */
         width: 100%;
-        height: auto;
+    }
+    .mobile-menu-button.admin-burger {
+        display: block; /* Показываем бургер */
+    }
+    .admin-grid-container {
+         grid-template-columns: 1fr; /* Один столбец для фильтра/загрузки */
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-main-content {
+        padding: 1rem; /* Уменьшаем паддинг на маленьких экранах */
+    }
+    .admin-section-card {
+        padding: 1.5rem;
+    }
+    .section-title {
+        font-size: 1.3rem;
+    }
+    .form-grid {
+        grid-template-columns: 1fr; /* Все поля формы в один столбец */
+    }
+    .admin-submit-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    .btn-file-upload {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+     .admin-table th,
+    .admin-table td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+     /* Добавляем дата-атрибуты для мобильных таблиц */
+    .admin-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #28a745;
+    }
+    .admin-table thead { display: none; } /* Скрываем заголовки */
+    .admin-table tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+    .admin-table td {
+        display: block;
+        text-align: right; /* Значение справа */
+        border: none;
+        padding-left: 50%; /* Место для data-label */
         position: relative;
     }
-
-    .main-content {
-        margin-left: 0;
+    .admin-table td::before {
+        position: absolute;
+        left: 1rem;
+        width: calc(50% - 2rem);
+        text-align: left;
+        white-space: nowrap;
     }
+    .no-data { padding: 1rem; }
 }
 
-/* Side bar для телефона */
-.mobile-menu-toggle { display: none; }
-.mobile-menu-button {
-    display: none;
+/* style.css - Papildu stili jaunajam admin panelim */
+
+/* --- Modālie logi (Pārņemts no criteria.txt un pielāgots) --- */
+.modal-toggle {
+    display: none; /* Paslēpj checkbox */
+}
+
+.modal {
+    display: none; /* Sākumā paslēpts */
     position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 1000;
-    font-size: 2rem;
-    cursor: pointer;
-    color: #2c3e50;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 62, 80, 0.6); /* Tumšāks fons no main.css paletes */
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* Augstāk par visu */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 1rem; /* Atstarpe malās mobilajām ierīcēm */
+}
+
+.modal-toggle:checked ~ .modal {
+    display: flex; /* Parādām, kad checkbox ir atzīmēts */
+    opacity: 1;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer; /* Lai var aizvērt, klikšķinot uz fona */
+    z-index: 1051;
+}
+
+.admin-modal-content {
     background: white;
-    padding: 0.5rem 1rem;
+    padding: 2rem 2.5rem; /* Lielāki iekšējie paddingi */
+    border-radius: 15px; /* Noapaļoti stūri */
+    width: 90%;
+    max-width: 550px; /* Palielinām maksimālo platumu */
+    position: relative;
+    z-index: 1052;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Lielāka ēna */
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-toggle:checked ~ .modal .admin-modal-content {
+     transform: scale(1);
+}
+
+
+.modal-title {
+    font-size: 1.6rem; /* Lielāks virsraksts */
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.modal-title i {
+    color: #28a745;
+}
+
+.admin-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    font-size: 2rem; /* Lielāka aizvēršanas ikona */
+    cursor: pointer;
+    color: #adb5bd; /* Gaišāka krāsa */
+    line-height: 1;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-modal-close:hover {
+    color: #495057; /* Tumšāka pie hover */
+    transform: rotate(90deg);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+    flex-wrap: wrap; /* Pārnešana mazākos ekrānos */
+    justify-content: flex-end; /* Pogas labajā pusē */
+}
+
+/* --- Darbību pogas (tabulās, modālos logos) --- */
+.admin-action-btn {
+    /* Bāzes stili pogām, kas nav galvenā submit poga */
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none; /* Gadījumā, ja izmanto <a> */
+    color: white; /* Noklusējuma teksta krāsa */
+    font-weight: 500;
+}
+
+.admin-action-btn i {
+    font-size: 0.9em; /* Nedaudz mazāka ikona */
+}
+
+.admin-action-btn.edit-btn {
+    background-color: #007bff; /* Zila primārā poga */
+    border-color: #007bff;
+}
+.admin-action-btn.edit-btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+}
+
+.admin-action-btn.danger-btn {
+    background-color: #dc3545; /* Sarkana bīstamības poga */
+    border-color: #dc3545;
+}
+.admin-action-btn.danger-btn:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
+}
+
+.admin-action-btn.cancel-btn {
+    background-color: #6c757d; /* Pelēka sekundārā poga */
+    border-color: #6c757d;
+}
+.admin-action-btn.cancel-btn:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+    box-shadow: 0 2px 5px rgba(108, 117, 125, 0.2);
+}
+
+
+/* --- Checkbox stili (administration.txt) --- */
+.permission-group {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.permission-group > label { /* Virsraksts grupai */
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.permission-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsīvs režģis */
+    gap: 0.8rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 1rem;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    font-size: 0.95rem;
 }
 
+.checkbox-label:hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 1.1em;
+    height: 1.1em;
+    accent-color: #28a745; /* Zaļš akcents */
+    cursor: pointer;
+    transform: scale(1.1); /* Nedaudz lielāks */
+}
+
+.checkbox-label input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    accent-color: #adb5bd; /* Pelēks neaktīvam */
+}
+
+.checkbox-label i {
+    color: #28a745; /* Ikona zaļa */
+    width: 18px;
+    text-align: center;
+}
+
+.checkbox-label input[type="checkbox"]:disabled + i {
+    color: #adb5bd; /* Pelēka ikona neaktīvam */
+}
+
+/* --- Lietotāju tiesību beidži (administration.txt) --- */
+.user-permissions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.badge-permission {
+    background-color: rgba(40, 167, 69, 0.1); /* Caurspīdīgs zaļš fons */
+    color: #218838; /* Tumši zaļš teksts */
+    padding: 0.3rem 0.7rem;
+    border-radius: 15px; /* Apaļi stūri */
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    font-weight: 500;
+}
+
+.badge-permission i {
+    font-size: 0.9em;
+}
+
+/* --- Filtru formas --- */
+.filter-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.filter-form .form-group {
+    margin-bottom: 0; /* Noņemam apakšējo atstarpi filtra formā */
+    max-width: 400px; /* Ierobežojam platumu */
+}
+
+/* --- Mobilās tabulas pielāgojumi (ja nav pilnībā new_style.css) --- */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: fixed;
-        top: -100%;
-        left: 0;
-        transition: top 0.3s ease;
-        z-index: 999;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    /* Pārliecināmies, ka šie stili ir aktīvi */
+    .admin-table thead {
+        display: none;
     }
-
-    .mobile-menu-button { display: block; }
-    
-    .mobile-menu-toggle:checked ~ .sidebar {
-        top: 0;
+    .admin-table tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1rem;
+        background-color: #fff; /* Fons katrai rindai */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
-
-    .main-content {
-        margin-top: 70px;
+    .admin-table td {
+        display: block;
+        text-align: right; /* Vērtība labajā pusē */
+        border: none;
+        padding: 0.5rem 0 0.5rem 50%; /* Atstāj vietu labelim */
+        position: relative;
+        min-height: 1.5em; /* Minimālais augstums */
     }
-
-    .nav-menu {
-        max-height: calc(100vh - 120px);
-        overflow-y: auto;
+    .admin-table td::before {
+        content: attr(data-label); /* Izmantojam data-label */
+        font-weight: bold;
+        display: block;
+        position: absolute;
+        left: 0; /* Labelis kreisajā pusē */
+        width: calc(50% - 1rem); /* Label platums */
+        text-align: left;
+        color: #28a745; /* Zaļš label teksts */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.9em;
     }
-
-    .profile-section {
-        padding-top: 0.25rem;
+    .admin-table td[data-label="Darbības"] {
+        text-align: left; /* Darbību pogas sāk no kreisās */
+        padding-left: 0;
     }
-}
-
-@media (min-width: 769px) {
-    .sidebar {
-        display: block!important;
+     .admin-table td[data-label="Darbības"]::before {
+         display: none; /* Darbībām nevajag label */
+     }
+    .admin-table td[data-label="Darbības"] form,
+    .admin-table td[data-label="Darbības"] .admin-action-btn {
+        margin-right: 0.5rem; /* Atstarpes starp pogām */
+        margin-bottom: 0.5rem;
+    }
+    .modal-actions {
+         justify-content: center; /* Centrā pogas mazos ekrānos */
+    }
+    .admin-modal-content {
+        padding: 1.5rem;
     }
 }

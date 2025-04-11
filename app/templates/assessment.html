@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skolas Klašu Vērtēšanas Sistēma</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <h1 style="color: #2c3e50; font-size: 1.5rem;">Vērtēšanas Sistēma</h1>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('main.index') }}" class="nav-link"><i class="fas fa-home"></i> Sākums</a>
+                <a href="#criteria" class="nav-link"><i class="fas fa-tasks"></i> Kritēriji</a>
+                <a href="#calculation-method" class="nav-link"><i class="fas fa-calculator"></i> Aprēķins</a>
+                <a href="#example" class="nav-link"><i class="fas fa-clipboard-list"></i> Piemērs</a>
+            </div>
+            </nav>
+    </header>
+
+    <div class="hero-banner system-hero">
+        <div class="hero-content">
+            <h1><i class="fas fa-balance-scale"></i> Skolas Klašu Vērtēšanas Sistēma</h1>
+            <p>Detalizēts paskaidrojums par klasēm piešķirto punktu aprēķināšanas metodiku un kritērijiem.</p>
+        </div>
+    </div>
+
+    <main class="page-container">
+        <section id="introduction" class="content-section card-style animate-on-scroll">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> Sistēmas Pārskats</h2>
+            <p class="section-description">Mūsu skolas vērtēšanas sistēma izstrādāta, lai godīgi novērtētu klašu aktivitāti dažādās jomās. Sistēma darbojas, piešķirot punktus klasēm par viņu sasniegumiem un aktivitātēm, izmantojot vienotus kritērijus.</p>
+
+            <div class="age-groups-grid">
+                <div class="info-card hover-lift">
+                     <i class="fas fa-child info-icon"></i>
+                     <h3>Jaunākā Grupa (2.-6. klase)</h3>
+                    <p>Šīm klasēm tiek piemēroti vienādi vērtēšanas kritēriji atbilstoši viņu vecumam un aktivitātēm.</p>
+                </div>
+                 <div class="info-card hover-lift">
+                    <i class="fas fa-user-graduate info-icon"></i>
+                    <h3>Vecākā Grupa (7.-12. klase)</h3>
+                    <p>Arī šajā grupā visas klases tiek vērtētas pēc vienotiem kritērijiem, kas pielāgoti vecākajām klasēm.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="criteria" class="content-section card-style animate-on-scroll">
+            <h2 class="section-title"><i class="fas fa-tasks"></i> Vērtēšanas Kritēriji</h2>
+             <p class="section-description">Skolas administrācija nosaka vērtēšanas kritērijus. Katram kritērijam ir savs maksimālais punktu skaits un koeficients, kas nosaka tā svarīgumu kopējā vērtējumā.</p>
+
+            <div class="criteria-grid">
+                 {% if criteria %}
+                    {% for criterion in criteria %}
+                    <div class="criteria-card hover-lift">
+                         <div class="criteria-card-header">
+                            <i class="fas fa-check-circle criteria-card-icon"></i>
+                             <h3>{{ criterion.name }}</h3>
+                        </div>
+                         <div class="criteria-card-body">
+                            {# <p><strong>Maksimālie punkti:</strong> {{ criterion.max_points }}</p> #}
+                             <p><strong>Koeficients:</strong> {{ criterion.coefficient }}</p>
+                            {# <p class="criteria-description">{{ criterion.description }}</p> #}
+                        </div>
+                    </div>
+                    {% endfor %}
+                 {% else %}
+                    <p>Pašlaik nav definētu vērtēšanas kritēriju.</p>
+                 {% endif %}
+            </div>
+        </section>
+
+        <section id="calculation-method" class="content-section card-style animate-on-scroll">
+             <h2 class="section-title"><i class="fas fa-calculator"></i> Aprēķināšanas Metodika</h2>
+            <p class="section-description">Klases aktivitātes novērtējums tiek aprēķināts secīgi, izmantojot šādus soļus, lai nodrošinātu godīgu salīdzināšanu:</p>
+
+            <div class="calculation-steps-grid">
+                <div class="step-card hover-lift">
+                    <div class="step-number">1</div>
+                     <i class="fas fa-clipboard-check step-icon"></i>
+                    <h3>Punktu Reģistrēšana</h3>
+                    <p>Tiek fiksēti klases iegūtie punkti katrā kritērijā.</p>
+                </div>
+                 <div class="step-card hover-lift">
+                    <div class="step-number">2</div>
+                    <i class="fas fa-divide step-icon"></i>
+                    <h3>Attiecības Aprēķins</h3>
+                     <p>Iegūtie punkti tiek dalīti ar maksimālo iespējamo punktu skaitu.</p>
+                </div>
+                <div class="step-card hover-lift">
+                    <div class="step-number">3</div>
+                    <i class="fas fa-times step-icon"></i>
+                    <h3>Koeficienta Piemērošana</h3>
+                    <p>Iegūtā attiecība tiek reizināta ar kritērija koeficientu.</p>
+                </div>
+                 <div class="step-card hover-lift">
+                     <div class="step-number">4</div>
+                     <i class="fas fa-equals step-icon"></i>
+                    <h3>Gala Rezultāts</h3>
+                    <p>Visu kritēriju rezultāti tiek summēti kopējai aktivitātei.</p>
+                </div>
+            </div>
+
+             <div class="formula-box animate-on-scroll">
+                <i class="fas fa-flask formula-icon"></i>
+                 <h4>Aprēķina Formula</h4>
+                 <p>Kopējā Aktivitāte = Σ (Iegūtie Punkti / Maksimālie Punkti × Koeficients)</p>
+            </div>
+
+            {# Komentārs par maksimālo aktivitāti - var atstāt vai dzēst, ja nav aktuāli #}
+            <p style="text-align: center; margin-top: 1rem; color: #6c757d;">Maksimālā iespējamā aktivitāte ir visu koeficientu summa.</p>
+         </section>
+
+        <section id="example" class="content-section card-style animate-on-scroll">
+            <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Piemērs: 2.a Klases Novērtējums</h2>
+
+            <div class="table-responsive">
+                 <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-tag"></i> Kritērijs</th>
+                            <th><i class="fas fa-star"></i> Iegūtie Punkti</th>
+                             <th><i class="fas fa-bullseye"></i> Maksimālie Punkti</th>
+                             <th><i class="fas fa-percentage"></i> Attiecība</th>
+                            <th><i class="fas fa-balance-scale-right"></i> Koeficients</th>
+                             <th><i class="fas fa-equals"></i> Rezultāts</th>
+                         </tr>
+                    </thead>
+                     <tbody>
+                        <tr>
+                            <td data-label="Kritērijs">Dežūras</td>
+                            <td data-label="Iegūtie Punkti">5</td>
+                             <td data-label="Maksimālie Punkti">5</td>
+                             <td data-label="Attiecība">1.00</td>
+                            <td data-label="Koeficients">2</td>
+                            <td data-label="Rezultāts">2.00</td>
+                        </tr>
+                         <tr>
+                            <td data-label="Kritērijs">Grāmatas</td>
+                             <td data-label="Iegūtie Punkti">3</td>
+                            <td data-label="Maksimālie Punkti">7</td>
+                            <td data-label="Attiecība">0.43</td>
+                            <td data-label="Koeficients">1.5</td>
+                            <td data-label="Rezultāts">0.64</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Kritērijs">Pasākumi</td>
+                            <td data-label="Iegūtie Punkti">10</td>
+                            <td data-label="Maksimālie Punkti">12</td>
+                            <td data-label="Attiecība">0.83</td>
+                            <td data-label="Koeficients">3</td>
+                             <td data-label="Rezultāts">2.50</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                         <tr>
+                             <td colspan="5"><strong>Kopējais Aktivitātes Vērtējums:</strong></td>
+                            <td><strong>5.14</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+             </div>
+
+            <div class="example-details">
+                <div class="example-item">
+                     <h4><i class="fas fa-calendar-check"></i> Dežūras</h4>
+                    <p>Attiecība: 5 / 5 = 1.00</p>
+                    <p>Rezultāts: 1.00 × 2 = 2.00 punkti</p>
+                    <div class="activity-meter">
+                        <div class="activity-bar" style="width: 100%;" title="100%"></div>
+                    </div>
+                </div>
+                <div class="example-item">
+                    <h4><i class="fas fa-book-open"></i> Grāmatas</h4>
+                    <p>Attiecība: 3 / 7 ≈ 0.43</p>
+                    <p>Rezultāts: 0.43 × 1.5 ≈ 0.64 punkti</p>
+                     <div class="activity-meter">
+                         <div class="activity-bar" style="width: 43%; background-color: #ffc107;" title="43%"></div> {# Cita krāsa zemākam rezultātam #}
+                    </div>
+                </div>
+                <div class="example-item">
+                    <h4><i class="fas fa-users"></i> Pasākumi</h4>
+                    <p>Attiecība: 10 / 12 ≈ 0.83</p>
+                    <p>Rezultāts: 0.83 × 3 ≈ 2.50 punkti</p>
+                    <div class="activity-meter">
+                        <div class="activity-bar" style="width: 83%;" title="83%"></div>
+                    </div>
+                 </div>
+            </div>
+
+             <div class="result-highlight animate-on-scroll">
+                <i class="fas fa-award"></i>
+                <p>2.a klases kopējā aktivitāte: <strong>5.14</strong></p>
+                <p>(no maksimāli iespējamajiem 6.5 punktiem)</p>
+                 <div class="activity-meter large">
+                    <div class="activity-bar final-bar" style="width: 79%;" title="~79%"></div>
+                 </div>
+            </div>
+        </section>
+
+        <section id="summary" class="content-section card-style animate-on-scroll">
+            <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Kopsavilkums</h2>
+             <p class="section-description">Vērtēšanas sistēma ir izstrādāta, lai nodrošinātu godīgu un caurskatāmu klašu aktivitātes novērtējumu, veicinot iesaisti dažādās skolas dzīves jomās.</p>
+             <ul class="summary-list">
+                <li><i class="fas fa-check-circle"></i> Godīga un vienlīdzīga vērtēšana.</li>
+                 <li><i class="fas fa-check-circle"></i> Aktivitātes veicināšana dažādās jomās.</li>
+                <li><i class="fas fa-check-circle"></i> Aktīvāko klašu atzīmēšana.</li>
+                <li><i class="fas fa-check-circle"></i> Skaidrs priekšstats par sasniegumiem.</li>
+                <li><i class="fas fa-check-circle"></i> Koeficienti svarīgāko kritēriju izcelšanai.</li>
+             </ul>
+            {# Šī poga varētu vest uz galveno lapu vai kontaktu formu #}
+            <div style="text-align: center; margin-top: 2rem;">
+                 <a href="{{ url_for('main.index') }}" class="action-btn hover-lift"><i class="fas fa-arrow-left"></i> Atpakaļ uz sākumu</a>
+             </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" id="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Par mums</h3>
+                <p>Skolas aktivitāšu reitinga sistēma, kas veicina klašu savstarpējo konkurenci un aktivitāti</p>
+            </div>
+            <div class="footer-column">
+                <h3>Saites</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Sākums</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Noteikumi</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Kontakti</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Atgriezeniskā saite </a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Kontakti</h3>
+                <p onclick="window.location.href ='mailto:5vsk@izglitiba.jelgava.lv' "><i class="fas fa-envelope"></i> 5vsk@izglitiba.jelgava.lv</p>
+                <p onclick="window.location.href ='tel:+37163026073' "><i class="fas fa-phone"></i> +371 63026073</p>
+                <p onclick="window.location.href='https://maps.app.goo.gl/Won76Hfny4NVxjVo8'"><i class="fas fa-map-marker-alt"></i> Aspazijas iela 20, Jelgava</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 J5vsk. Visas tiesības aizsargātas.</p>
+            <div class="social-icons">
+                <a href="https://lv-lv.facebook.com/j5vsk" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/jelgavas_5vsk?igsh=d3Uxdnh6cTExZXRj" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/channel/UC7pCfPGddd3HadBnxzlXQAA" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll animācijas
+             const animateElements = document.querySelectorAll('.animate-on-scroll');
+             function checkVisibility() {
+                 animateElements.forEach(element => {
+                     const elementTop = element.getBoundingClientRect().top;
+                     const windowHeight = window.innerHeight;
+                     if (elementTop < windowHeight - 100) { // Parādās, kad ir 100px no apakšas
+                         element.classList.add('visible');
+                     } else {
+                         // element.classList.remove('visible'); // Noņem, ja grib animēt katru reizi
+                     }
+                 });
+            }
+            window.addEventListener('scroll', checkVisibility);
+             checkVisibility(); // Pārbauda redzamību lapas ielādes brīdī
+
+             // Progress joslu animācija (ja izmanto .activity-meter)
+             setTimeout(() => {
+                document.querySelectorAll('.activity-bar').forEach(bar => {
+                    const targetWidth = bar.style.width || '0%';
+                    bar.style.width = '0%'; // Sākumā 0
+                    requestAnimationFrame(() => { // Dod pārlūkam laiku apstrādāt 0% platumu
+                         bar.style.transition = 'width 1s ease-in-out';
+                         bar.style.width = targetWidth; // Animē uz mērķa platumu
+                     });
+                 });
+            }, 500); // Neliela aizture pirms animācijas sākuma
+         });
+    </script>
+</body>
+</html>

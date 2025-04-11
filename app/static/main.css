@@ -1299,3 +1299,440 @@ input[type="checkbox"] {
     /* Используем стили из main2.css */
     margin-top: 3rem; /* Добавим отступ сверху */
 }
+
+
+
+
+
+
+
+/* style.css - Papildu stili Vērtēšanas Sistēmas lapai */
+
+/* Globālie uzlabojumi, ja nepieciešams */
+body {
+    font-family: 'Arial', sans-serif; /* Nodrošinām konsekventu fontu */
+    line-height: 1.7; /* Palielinām rindstarpu labākai lasāmībai */
+}
+
+/* Hero sekcijas pielāgojumi */
+.system-hero {
+    padding: 3rem 2rem; /* Mazāks padding nekā galvenajā lapā */
+    min-height: 250px; /* Mazāks augstums */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('/api/placeholder/1600/300') center/cover no-repeat; /* Fona attēls */
+    margin-bottom: 3rem; /* Lielāka atstarpe zem hero */
+}
+
+.system-hero h1 {
+    font-size: 2.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Vispārējs stils satura sekcijām */
+.content-section {
+    margin-bottom: 3rem; /* Lielāka atstarpe starp sekcijām */
+}
+
+.card-style {
+    background: #ffffff;
+    border-radius: 15px; /* Noapaļoti stūri kā index.txt */
+    padding: 2.5rem; /* Vairāk iekšējā atstarpe */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); /* Ēna kā index.txt */
+}
+
+/* Uzlaboti section virsraksti */
+.section-title {
+    font-size: 1.8rem; /* Atbilst index.txt */
+    margin-bottom: 1.5rem; /* Lielāka atstarpe zem virsraksta */
+    padding-bottom: 0.8rem;
+    border-bottom: 3px solid #28a745; /* Zaļā līnija */
+    display: inline-block; /* Lai līnija būtu tikai zem teksta */
+}
+
+.section-description {
+    margin-bottom: 2rem; /* Lielāka atstarpe zem apraksta */
+    font-size: 1.05rem;
+    color: #6c757d; /* Pelēks teksts */
+}
+
+/* Vecuma grupu režģis */
+.age-groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+/* Izmantojam .info-card no main.css, nav nepieciešams papildu stils */
+
+/* Kritēriju režģis */
+.criteria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.criteria-card {
+    background-color: #f8f9fa; /* Gaiši pelēks fons */
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+    border-left: 5px solid #28a745; /* Zaļš akcents kreisajā malā */
+}
+
+.criteria-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.criteria-card-icon {
+    color: #28a745;
+    font-size: 1.5rem;
+}
+
+.criteria-card h3 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin: 0; /* Noņemam h3 noklusējuma margin */
+}
+
+.criteria-card-body p {
+    margin-bottom: 0.5rem;
+    color: #495057; /* Nedaudz tumšāks teksts */
+    font-size: 0.95rem;
+}
+
+.criteria-card-body p:last-child {
+    margin-bottom: 0;
+}
+
+.criteria-description {
+    font-style: italic;
+    color: #6c757d;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+}
+
+/* Aprēķina soļu režģis */
+.calculation-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.step-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.step-number {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(40, 167, 69, 0.3);
+}
+
+.step-icon {
+    font-size: 2rem;
+    color: #28a745;
+    margin-top: 1.5rem; /* Atstarpe no numura */
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.step-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.step-card p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Formulas bloks */
+.formula-box {
+    background-color: rgba(40, 167, 69, 0.05); /* Viegli zaļš fons */
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    margin: 2.5rem 0;
+    border: 1px dashed #28a745; /* Zaļa pārtraukta līnija */
+    text-align: center;
+    position: relative;
+}
+
+.formula-icon {
+    font-size: 1.8rem;
+    color: #28a745;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.formula-box h4 {
+    color: #218838; /* Tumšāks zaļš virsrakstam */
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.formula-box p {
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    font-family: 'Courier New', Courier, monospace; /* Monospace fonts formulām */
+}
+
+/* Tabulas stili */
+.table-responsive {
+    overflow-x: auto; /* Horizontālā ritjosla maziem ekrāniem */
+    margin: 2rem 0;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    border-radius: 8px; /* Noapaļoti stūri */
+    overflow: hidden; /* Lai noapaļojums darbotos */
+}
+
+.styled-table th, .styled-table td {
+    padding: 1rem 1.2rem; /* Palielināts padding */
+    text-align: left;
+    border-bottom: 1px solid #e9ecef; /* Gaiša apakšējā līnija */
+    vertical-align: middle;
+}
+
+.styled-table th {
+    background-color: #f8f9fa; /* Gaiši pelēks fons galvenei */
+    color: #495057; /* Tumšāks teksts galvenē */
+    font-weight: 600; /* Treknāks teksts */
+    white-space: nowrap; /* Neļauj pārnest virsrakstus */
+}
+
+.styled-table th i {
+    margin-right: 0.6rem; /* Atstarpe ikonai */
+    color: #28a745;
+}
+
+.styled-table tbody tr:nth-child(even) {
+    background-color: rgba(248, 249, 250, 0.5); /* Vēl gaišāks fons katrai otrai rindai */
+}
+
+.styled-table tbody tr:hover {
+    background-color: rgba(40, 167, 69, 0.05); /* Viegli zaļa krāsa uz hover */
+}
+
+.styled-table tfoot td {
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border-top: 2px solid #dee2e6; /* Izteiktāka līnija virs kājenes */
+}
+
+/* Piemēra detaļas */
+.example-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.example-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.example-item h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.example-item h4 i {
+    color: #28a745;
+}
+
+.example-item p {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 0.8rem;
+}
+
+/* Progress josla (izmanto .activity-meter no main.css) */
+.activity-meter {
+    height: 15px; /* Padarām nedaudz biezāku */
+    background-color: #e9ecef; /* Gaišāks fons */
+    margin-top: 0.5rem; /* Mazāka atstarpe */
+}
+.activity-meter.large {
+    height: 20px;
+}
+
+.activity-bar {
+    background-color: #28a745; /* Zaļa josla */
+    transition: width 1s ease-in-out; /* Pievienojam animāciju CSS */
+}
+.activity-bar.final-bar {
+     background: linear-gradient(90deg, #ffc107, #28a745); /* Gradients gala rezultātam */
+}
+
+/* Rezultāta izcelšana */
+.result-highlight {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #2c3e50;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 2rem;
+    background-color: rgba(40, 167, 69, 0.1); /* Viegli zaļš fons */
+    border-radius: 10px;
+    border: 2px solid rgba(40, 167, 69, 0.3);
+}
+.result-highlight i {
+    font-size: 2rem;
+    color: #28a745;
+    margin-bottom: 1rem;
+    display: block;
+}
+.result-highlight strong {
+    color: #218838; /* Tumšāks zaļš skaitlim */
+    font-size: 1.5rem;
+}
+
+/* Kopsavilkuma saraksts */
+.summary-list {
+    list-style: none; /* Noņemam bumbiņas */
+    padding-left: 0;
+    margin-top: 1.5rem;
+}
+
+.summary-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.05rem;
+}
+
+.summary-list i {
+    color: #28a745; /* Zaļas ikonas */
+    font-size: 1.2rem;
+}
+
+/* Animācijas (pārņemam no oriģinālā CSS) */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px); /* Nedaudz lielāks sākuma nobīde */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Responsivitātes pielāgojumi */
+@media (max-width: 768px) {
+    .card-style {
+        padding: 1.5rem;
+    }
+    .section-title {
+        font-size: 1.6rem;
+    }
+    .system-hero h1 {
+        font-size: 1.8rem;
+    }
+     /* Tabulas pielāgojumi mobilajām ierīcēm */
+    .styled-table thead {
+        display: none; /* Slēpjam galveni */
+    }
+    .styled-table tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1rem;
+        background-color: #fff;
+    }
+    .styled-table td {
+        display: block;
+        text-align: right; /* Vērtība labajā pusē */
+        border: none;
+        border-bottom: 1px dotted #eee; /* Viegls atdalītājs */
+        padding-left: 50%; /* Vieta labelim */
+        position: relative;
+        min-height: 1.5em;
+    }
+     .styled-table td:last-child {
+         border-bottom: none; /* Noņemam pēdējam elementam līniju */
+     }
+    .styled-table td::before {
+        content: attr(data-label); /* Izmantojam data-label */
+        font-weight: bold;
+        display: block;
+        position: absolute;
+        left: 1rem; /* Labelis kreisajā pusē */
+        width: calc(50% - 1.5rem); /* Label platums */
+        text-align: left;
+        color: #28a745;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.9em;
+    }
+     .styled-table tfoot td {
+        text-align: left;
+         padding-left: 1rem;
+         border-top: 1px solid #ddd;
+    }
+    .styled-table tfoot td strong {
+        float: right; /* Summa labajā pusē */
+    }
+     .styled-table tfoot td::before {
+         display: none; /* Nav nepieciešams labelis kopsummai */
+     }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.4rem;
+    }
+    .card-style {
+        padding: 1rem;
+    }
+    .system-hero h1 {
+        font-size: 1.6rem;
+    }
+    .formula-box p {
+        font-size: 1rem;
+    }
+}
