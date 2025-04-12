@@ -102,14 +102,20 @@ def upload_file():
     file_type = request.form.get("file_type")
 
     if 'file' not in request.files:
-        flash('No file part', 'error')
-        return redirect(url_for('admin.main')), 301
+        response = current_app.response_class(
+            response=json.dumps({'success':False, "message": "Nav faila"}),
+            status=409,
+            mimetype="application/json")
+        return response
     
     file = request.files['file']
 
     if file.filename == '':
-        flash('No selected file', 'error')
-        return redirect(url_for('admin.main')), 301
+        response = current_app.response_class(
+            response=json.dumps({'success':False, "message": "Nekorekts nosaukums"}),
+            status=409,
+            mimetype="application/json")
+        return response
     
     split_name, file_extension = os.path.splitext(file.filename)
 
@@ -117,15 +123,19 @@ def upload_file():
         filename = secure_filename(file_type)
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], f'{filename}{file_extension}'))
 
-    flash('Fails bija veiksmigi pievienots', 'success')
-    return redirect(url_for('admin.main')), 301
+    response = current_app.response_class(
+        response=json.dumps({'success':True, "message": "Fails bija veiksmigi pievienots"}),
+        status=201,
+        mimetype="application/json")
+    
+    return response
 
 @admin_bp.route("/user", methods=['GET'])
 @login_required
 def user():
     user = User.query.filter_by(id=current_user.id).first()
 
-    return render_template('admin/user.html', user=user), 302
+    return render_template('admin/user.html', user=user)
 
 @admin_bp.route("user/username", methods=['POST'])
 @login_required

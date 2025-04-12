@@ -143,16 +143,16 @@
             <div class="admin-section-card">
                 <h2 class="section-title"><i class="fas fa-file-upload"></i> Failu augšupielāde</h2>
                 <div class="file-upload-area">
-                    <form method="POST" action="/admin/files" enctype="multipart/form-data" class="file-upload-form">
+                    <form method="POST" action="files" enctype="multipart/form-data" class="file-upload-form" id="CriterionForm" onsubmit="event.preventDefault(); sendForm('CriterionForm');">
                         <input type="hidden" name="file_type" value="criterion">
                         <label for="criteria-file" class="btn btn-file-upload hover-lift">
                             <i class="fas fa-file-pdf"></i> Izvēlēties kritērijus (.pdf)
-                            <input type="file" id="criteria-file" name="file" style="display: none;" onchange="this.form.submit()" accept=".pdf">
+                            <input type="file" id="criteria-file" name="file" style="display: none;" onchange="sendForm('CriterionForm')" accept=".pdf">
                         </label>
                          <span class="file-info">Kritēriju fails: {{ criterion_file_status }}</span>
                     </form>
 
-                    <form method="POST" action="/admin/files" enctype="multipart/form-data" class="file-upload-form">
+                    <form method="POST" action="files" enctype="multipart/form-data" class="file-upload-form">
                         <input type="hidden" name="file_type" value="schedule">
                         <label for="activity-file" class="btn btn-file-upload hover-lift">
                              <i class="fas fa-calendar-alt"></i> Izvēlēties grafiku (.pdf)
