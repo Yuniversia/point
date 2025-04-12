@@ -776,10 +776,10 @@ select:focus {
 }
 
 @keyframes fadeInOut {
-    0% {opacity: 0; transform: translate(-50%, -20px);}
-    10% {opacity: 1; transform: translate(-50%, 0);}
-    90% {opacity: 1; transform: translate(-50%, 0);}
-    100% {opacity: 0; transform: translate(-50%, -20px);}
+    0% {opacity: 0; transform: translate(0, -20px);}
+    10% {opacity: 1; transform: translate(0, 0);}
+    90% {opacity: 1; transform: translate(0, 0);}
+    100% {opacity: 0; transform: translate(0, -20px);}
 }
 
 /* Анимации */

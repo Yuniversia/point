@@ -44,6 +44,9 @@
     </div>
 
     <div class="main-content admin-main-content">
+
+        <div id="main" class="flash-messages-container"></div>
+
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages-container">
@@ -56,9 +59,41 @@
             {% endif %}
         {% endwith %}
 
+        <script>
+            function sendForm(formId) {
+                form = document.getElementById(formId)
+
+                fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const result = document.getElementById("main");
+                    const msg = data.message;
+                    const success = data.success;
+
+                    var icon = "fa-check-circle";
+                    var category = "success";
+
+                    if (success === false) {
+                        var icon = "fa-exclamation-circle";
+                        var category = "error";
+                    }
+
+                    const div = `<div class='alert alert-${category} admin-alert'><i class='fas ${icon}'></i>
+                        ${msg}
+                        </div>`;
+                    
+                    result.innerHTML = ''
+                    result.innerHTML = div
+                });
+            }
+        </script>
+
         <div class="admin-section-card">
             <h2 class="section-title"><i class="fas fa-plus-circle"></i> Pievienot punktus klasei</h2>
-            <form method="POST" action="{{ url_for('admin.add_point') }}" class="admin-form">
+            <form method="POST" action="points" id="PointsForm" class="admin-form" onsubmit="event.preventDefault(); sendForm('PointsForm');">   <!-- Send form to /admin/points -->
                 <div class="form-grid">
                     <div class="form-group">
                          <label for="class_id"><i class="fas fa-school"></i> Klase</label>
@@ -85,11 +120,11 @@
                         </select>
                     </div>
                 </div>
-                 <button type="submit" class="btn btn-submit admin-submit-btn hover-lift">
-                     <i class="fas fa-paper-plane"></i> Pievienot punktus
-                 </button>
+                <button type="submit" class="btn btn-submit admin-submit-btn hover-lift">
+                    <i class="fas fa-paper-plane"></i> Pievienot punktus
+                </button>
             </form>
-        </div>
+        </div> <!-- admin-section-card -->
 
          <div class="admin-grid-container">
                         <div class="admin-section-card">

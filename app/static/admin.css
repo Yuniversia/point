@@ -334,11 +334,13 @@ body {
 /* --- Уведомления (Flash Messages) --- */
 .flash-messages-container {
     margin-bottom: 1.5rem;
+    position: fixed;
+    width: 97%;
     /* Позиционирование внутри .admin-main-content */
 }
 .admin-alert {
     /* Наследует стили .alert из main.css, но можно переопределить позиционирование */
-    position: relative; /* Или static, если не нужно абсолютное позиционирование */
+    position: static; /* Или static, если не нужно абсолютное позиционирование */
     top: auto;
     left: auto;
     transform: none;
@@ -346,7 +348,6 @@ body {
     width: 100%;
     text-align: left;
     border-left-width: 5px; /* Используем рамку слева как в main.css */
-    animation: none; /* Отключаем анимацию fadeInOut если не нужна */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 

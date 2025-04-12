@@ -7,6 +7,7 @@ from app.models.total_points import Total_point
 from app.models.cashing import cashing_top_by_group, max_point_cashing, r
 
 import os
+import json
 
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
@@ -40,7 +41,7 @@ def main(group):
     except:
         return render_template('admin/admin.html', group=group, user=user, classes = classes, criteria=criteria)
 
-@admin_bp.route("/point", methods=['POST'])
+@admin_bp.route("/points", methods=['POST'])
 @login_required
 def add_point():
     class_id = request.form.get("class_id")
@@ -75,12 +76,21 @@ def add_point():
         max_point_cashing(group)
         cashing_top_by_group(group)
 
-        flash('Punkti bija veiksmīgi pievienoti', 'success')
-        return redirect(url_for('admin.main') + f"?group={group}"), 301
+        response = current_app.response_class(
+            response=json.dumps({'success':True, "message": "Punkti bija veiksmīgi pievienoti"}),
+            status=201,
+            mimetype="application/json"
+        )
+        return response
     except:
         db.session.reset(point_class)
-        flash('Notieka kļuda', 'error')
-        return redirect(url_for('admin.main') + f"?group={group}"), 502
+
+        response = current_app.response_class(
+            response=json.dumps({'success':False, "message": "Notieka kļuda"}),
+            status=502,
+            mimetype="application/json"
+        )
+        return response
 
 def allowed_file(filename):
     return '.' in filename and \

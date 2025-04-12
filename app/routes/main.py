@@ -22,8 +22,6 @@ def index():
     try:
         top = r.lrange(f"{group}_classes", 0, 2) # get three first elements how list [2.a, 2.b, 3.a]
 
-        current_app.logger.info(f"Top classes: {top}")
-
         top_clases = []
         for i in top:
             cl = r.hgetall(i)
