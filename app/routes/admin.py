@@ -77,7 +77,7 @@ def add_point():
         cashing_top_by_group(group)
 
         response = current_app.response_class(
-            response=json.dumps({'success':True, "message": "Punkti bija veiksmīgi pievienoti"}),
+            response=json.dumps({'success':True, "message": "Punkti bija veiksmīgi pievienoti", "reload": False}),
             status=201,
             mimetype="application/json"
         )
@@ -86,7 +86,7 @@ def add_point():
         db.session.reset(point_class)
 
         response = current_app.response_class(
-            response=json.dumps({'success':False, "message": "Notieka kļuda"}),
+            response=json.dumps({'success':False, "message": "Notieka kļuda", "reload": False}),
             status=502,
             mimetype="application/json"
         )
@@ -103,7 +103,7 @@ def upload_file():
 
     if 'file' not in request.files:
         response = current_app.response_class(
-            response=json.dumps({'success':False, "message": "Nav faila"}),
+            response=json.dumps({'success':False, "message": "Nav faila", "reload": False}),
             status=409,
             mimetype="application/json")
         return response
@@ -112,7 +112,7 @@ def upload_file():
 
     if file.filename == '':
         response = current_app.response_class(
-            response=json.dumps({'success':False, "message": "Nekorekts nosaukums"}),
+            response=json.dumps({'success':False, "message": "Nekorekts nosaukums", "reload": False}),
             status=409,
             mimetype="application/json")
         return response
@@ -124,7 +124,7 @@ def upload_file():
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], f'{filename}{file_extension}'))
 
     response = current_app.response_class(
-        response=json.dumps({'success':True, "message": "Fails bija veiksmigi pievienots"}),
+        response=json.dumps({'success':True, "message": "Fails bija veiksmigi pievienots", "reload": False}),
         status=201,
         mimetype="application/json")
     
@@ -143,7 +143,7 @@ def change_username():
     username = request.form.get('username')
     if User.query.filter_by(username=username).one_or_none():
         response = current_app.response_class(
-            response=json.dumps({'success':False, "message": "Tads lietotajs jau ir"}),
+            response=json.dumps({'success':False, "message": "Tads lietotajs jau ir", "reload": False}),
             status=409,
             mimetype="application/json")
     
@@ -154,10 +154,10 @@ def change_username():
     db.session.commit()
 
     response = current_app.response_class(
-        response=json.dumps({'success':True, "message": "Segvārds bija veiksmīgi mainīts"}),
+        response=json.dumps({'success':True, "message": "Segvārds bija veiksmīgi mainīts", "reload": True}),
         status=202,
         mimetype="application/json")
-    
+    flash("Segvārds bija veiksmīgi mainīts", "success")
     return response
 
 @admin_bp.route("/user", methods=['PUT'])
@@ -170,7 +170,7 @@ def change_password():
     db.session.commit()
 
     response = current_app.response_class(
-        response=json.dumps({'success':True, "message": "Parole bija vieksmīgi mainīta"}),
+        response=json.dumps({'success':True, "message": "Parole bija vieksmīgi mainīta", "reload": False}),
         status=202,
         mimetype="application/json")
     return response
@@ -183,9 +183,15 @@ def school_class():
         return redirect(request.url)
 
     if request.method == 'POST':
-        print("method post")
         name = request.form.get('name')
         group = request.form.get('group')
+
+        if ClassGroup.query.filter_by(name=name).one_or_none():
+            response = current_app.response_class(
+                response=json.dumps({'success':False, "message": "Tada klase jau pastav", "reload": False}),
+                status=409,
+                mimetype="application/json")
+            return response
 
         cl = ClassGroup(
             name=name,
@@ -195,8 +201,12 @@ def school_class():
         db.session.add(cl)
         db.session.commit()
 
-        flash('Klase veiksmīgi pievienota', 'success')
-        return redirect(url_for('admin.school_class') + f"?group={group}")
+        response = current_app.response_class(
+            response=json.dumps({'success':True, "message": "Klase veiksmīgi pievienota", "reload": True}),
+            status=201,
+            mimetype="application/json")
+        flash("Klase veiksmīgi pievienota", "success")
+        return response
     else:
         group = request.args.get('group', default=None, type=str)
         if group == None:
@@ -208,7 +218,7 @@ def school_class():
         return render_template('admin/classes.html', group=group, user=user, classes = classes)
 
 
-@admin_bp.route("/class/delete", methods=['POST'])
+@admin_bp.route("/classes", methods=['DELETE'])
 @login_required
 def delete_class():
     if not current_user.adding_classes:
@@ -218,12 +228,15 @@ def delete_class():
     id = request.form.get('id')
 
     school_class = db.session.get(ClassGroup, {"id": id})
-    print(school_class)
     db.session.delete(school_class)
     db.session.commit()
 
-    flash('Klase veiksmīgi dzēsta', 'success')
-    return redirect(url_for('admin.school_class') + f"?group={school_class.age_group}"), 301
+    response = current_app.response_class(
+        response=json.dumps({'success':True, "message": "Klase veiksmīgi dzēsta", "reload": True}),
+        status=201,
+        mimetype="application/json")
+    flash("Klase veiksmīgi dzēsta", "success")
+    return response
 
 @admin_bp.route("/criteria")
 @login_required

@@ -10,6 +10,7 @@ function sendForm(formId, method) {
         const result = document.getElementById("main");
         const msg = data.message;
         const success = data.success;
+        const reloadPage = data.reload;
 
         var icon = "fa-check-circle";
         var category = "success";
@@ -17,6 +18,10 @@ function sendForm(formId, method) {
         if (success === false) {
             var icon = "fa-exclamation-circle";
             var category = "error";
+        }
+
+        if (reloadPage === true) {
+            location.reload()
         }
 
         const div = `<div class='alert alert-${category} admin-alert'><i class='fas ${icon}'></i>

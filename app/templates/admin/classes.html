@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
+    <script src="{{ url_for('static',filename='script.js') }}"></script>
+    
 </head>
 <body>
     <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" hidden>
@@ -19,34 +21,35 @@
              <p>{{ user.name }}</p>
         </div>
         <ul class="nav-menu admin-nav-menu">
-             <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin'">
-                <i class="fas fa-tachometer-alt"></i> Galvenā
-            </li>
-            <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='{{ url_for('admin.user') }}'">
-                 <i class="fas fa-user-edit"></i> Lietotājs
-            </li>
-            {% if user.adding_classes %}
-            <li class="nav-item active" onclick="location.href='{{ url_for('admin.school_class') }}'"> {# Aktīvā saite #}
-                <i class="fas fa-school"></i> Klases
-            </li>
-            {% endif %}
-            {% if user.adding_category %}
-            <li class="nav-item {% if request.endpoint == 'admin.criteria' %}active{% endif %}" onclick="location.href='{{ url_for('admin.criteria') }}'">
-                <i class="fas fa-tasks"></i> Kritēriji
-            </li>
-            {% endif %}
-            {% if user.adding_users %}
-            <li class="nav-item {% if request.endpoint == 'admin.administration' %}active{% endif %}" onclick="location.href='{{ url_for('admin.administration') }}'">
-                 <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
-            </li>
-            {% endif %}
-            <li class="nav-item exit" onclick="location.href='/logout'">
-                 <i class="fas fa-sign-out-alt"></i> Iziet no sistēmas
-            </li>
+            <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin?group=young'">
+               <i class="fas fa-tachometer-alt"></i> Galvenā
+           </li>
+           <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='user'"> {# Aktīvā saite #}
+                <i class="fas fa-user-edit"></i> Lietotājs
+           </li>
+           {% if user.adding_classes %}
+           <li class="nav-item active" onclick="location.href='classes?group=young'">
+               <i class="fas fa-school"></i> Klases
+           </li>
+           {% endif %}
+           {% if user.adding_category %}
+           <li class="nav-item {% if request.endpoint == 'admin.criteria' %}active{% endif %}" onclick="location.href='criteria'">
+               <i class="fas fa-tasks"></i> Kritēriji
+           </li>
+           {% endif %}
+           {% if user.adding_users %}
+           <li class="nav-item {% if request.endpoint == 'admin.administration' %}active{% endif %}" onclick="location.href='administration'">
+                <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
+           </li>
+           {% endif %}
+           <li class="nav-item exit" onclick="location.href='/logout'">
+                <i class="fas fa-sign-out-alt"></i> Iziet no sistēmas
+           </li>
         </ul>
     </div>
 
     <div class="main-content admin-main-content">
+        <div id="main" class="flash-messages-container"></div>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages-container">
@@ -62,7 +65,7 @@
 
         <div class="admin-section-card">
             <h2 class="section-title"><i class="fas fa-plus-square"></i> Pievienot jaunu klasi</h2>
-            <form method="POST" action="{{ url_for('admin.school_class') }}" class="admin-form">
+            <form class="admin-form" id="AddClass" onsubmit="event.preventDefault(); sendForm('AddClass', 'POST');">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="name"><i class="fas fa-chalkboard"></i> Klases nosaukums</label>
@@ -116,7 +119,7 @@
                                 <td data-label="Grupa">Vecākā grupa</td>
                             {% endif %}
                             <td data-label="Darbības">
-                                 <form action="{{ url_for('admin.delete_class') }}" method="POST" style="display: inline;">
+                                 <form style="display: inline;" id="DeleteClass_{{ class.id }}" onsubmit="event.preventDefault(); sendForm('DeleteClass_{{ class.id }}', 'DELETE');">
                                     <input type="hidden" name="id" value="{{ class.id }}" />
                                     <button type="submit" class="btn btn-danger admin-action-btn danger-btn hover-lift" onclick="return confirm('Vai tiešām vēlaties dzēst šo klasi?');">
                                         <i class="fas fa-trash-alt"></i> Dzēst
