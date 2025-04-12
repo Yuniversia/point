@@ -137,19 +137,30 @@ def user():
 
     return render_template('admin/user.html', user=user)
 
-@admin_bp.route("user/username", methods=['POST'])
+@admin_bp.route("/user", methods=['PATCH'])
 @login_required
 def change_username():
     username = request.form.get('username')
+    if User.query.filter_by(username=username).one_or_none():
+        response = current_app.response_class(
+            response=json.dumps({'success':False, "message": "Tads lietotajs jau ir"}),
+            status=409,
+            mimetype="application/json")
+    
+        return response
     user = User.query.filter_by(id=current_user.id).first()
 
     user.username = username
     db.session.commit()
 
-    flash('Segvārds bija veiksmīgi mainīts', 'success')
-    return redirect(url_for('admin.user')), 301
+    response = current_app.response_class(
+        response=json.dumps({'success':True, "message": "Segvārds bija veiksmīgi mainīts"}),
+        status=202,
+        mimetype="application/json")
+    
+    return response
 
-@admin_bp.route("user/password", methods=['POST'])
+@admin_bp.route("/user", methods=['PUT'])
 @login_required
 def change_password():
     password = request.form.get('password')
@@ -158,8 +169,11 @@ def change_password():
     user.password_hash = generate_password_hash(password)
     db.session.commit()
 
-    flash('Parole bija vieksmīgi mainīta', 'success')
-    return redirect(url_for('admin.user')), 200
+    response = current_app.response_class(
+        response=json.dumps({'success':True, "message": "Parole bija vieksmīgi mainīta"}),
+        status=202,
+        mimetype="application/json")
+    return response
 
 @admin_bp.route("/classes", methods=['GET', 'POST'])
 @login_required

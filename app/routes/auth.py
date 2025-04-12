@@ -20,7 +20,7 @@ def login():
         if user and User.check_password(user.password_hash, password):
             login_user(user, duration=timedelta(seconds=Login_conf.login_time))
             session.permanent = True
-            return redirect(url_for('admin.main'))
+            return redirect(url_for('admin.main') + "?group=young")
         else:
             flash('Nepareizs lietotajs vai parole', 'error')
             return redirect(url_for('main.index'))

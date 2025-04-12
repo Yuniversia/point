@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
+    <script src="{{ url_for('static',filename='script.js') }}"></script>
     </head>
 <body>
     <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" hidden> <label for="mobile-menu-toggle" class="mobile-menu-button admin-burger">☰</label> <div class="sidebar admin-sidebar">
@@ -16,31 +17,31 @@
         </div>
 
         <ul class="nav-menu admin-nav-menu">
-             <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin'">
-                <i class="fas fa-tachometer-alt"></i> Galvenā
-            </li>
-            <li class="nav-item {% if request.endpoint == 'admin.user_profile' %}active{% endif %}" onclick="location.href='user'">
+            <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin?group=young'">
+               <i class="fas fa-tachometer-alt"></i> Galvenā
+           </li>
+           <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='user'"> {# Aktīvā saite #}
                 <i class="fas fa-user-edit"></i> Lietotājs
-            </li>
-            {% if user.adding_classes %}
-            <li class="nav-item {% if request.endpoint == 'admin.classes' %}active{% endif %}" onclick="location.href='classes'">
-                <i class="fas fa-school"></i> Klases
-            </li>
-            {% endif %}
-            {% if user.adding_category %}
-            <li class="nav-item {% if request.endpoint == 'admin.criteria' %}active{% endif %}" onclick="location.href='criteria'">
-                <i class="fas fa-tasks"></i> Kritēriji
-            </li>
-            {% endif %}
-            {% if user.adding_users %}
-            <li class="nav-item {% if request.endpoint == 'admin.administration' %}active{% endif %}" onclick="location.href='administration'">
-                 <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
-            </li>
-            {% endif %}
-            <li class="nav-item exit" onclick="location.href='/logout'">
+           </li>
+           {% if user.adding_classes %}
+           <li class="nav-item {% if request.endpoint == 'admin.school_class' %}active{% endif %}" onclick="location.href='classes?group=young'">
+               <i class="fas fa-school"></i> Klases
+           </li>
+           {% endif %}
+           {% if user.adding_category %}
+           <li class="nav-item {% if request.endpoint == 'admin.criteria' %}active{% endif %}" onclick="location.href='criteria'">
+               <i class="fas fa-tasks"></i> Kritēriji
+           </li>
+           {% endif %}
+           {% if user.adding_users %}
+           <li class="nav-item {% if request.endpoint == 'admin.administration' %}active{% endif %}" onclick="location.href='administration'">
+                <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
+           </li>
+           {% endif %}
+           <li class="nav-item exit" onclick="location.href='/logout'">
                 <i class="fas fa-sign-out-alt"></i> Iziet no sistēmas
-            </li>
-        </ul>
+           </li>
+       </ul>
     </div>
 
     <div class="main-content admin-main-content">
@@ -59,41 +60,9 @@
             {% endif %}
         {% endwith %}
 
-        <script>
-            function sendForm(formId) {
-                form = document.getElementById(formId)
-
-                fetch(form.action, {
-                    method: form.method,
-                    body: new FormData(form),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const result = document.getElementById("main");
-                    const msg = data.message;
-                    const success = data.success;
-
-                    var icon = "fa-check-circle";
-                    var category = "success";
-
-                    if (success === false) {
-                        var icon = "fa-exclamation-circle";
-                        var category = "error";
-                    }
-
-                    const div = `<div class='alert alert-${category} admin-alert'><i class='fas ${icon}'></i>
-                        ${msg}
-                        </div>`;
-                    
-                    result.innerHTML = ''
-                    result.innerHTML = div
-                });
-            }
-        </script>
-
         <div class="admin-section-card">
             <h2 class="section-title"><i class="fas fa-plus-circle"></i> Pievienot punktus klasei</h2>
-            <form method="POST" action="points" id="PointsForm" class="admin-form" onsubmit="event.preventDefault(); sendForm('PointsForm');">   <!-- Send form to /admin/points -->
+            <form action="points" id="PointsForm" class="admin-form" onsubmit="event.preventDefault(); sendForm('PointsForm', 'POST');">   <!-- Send form to /admin/points -->
                 <div class="form-grid">
                     <div class="form-group">
                          <label for="class_id"><i class="fas fa-school"></i> Klase</label>
@@ -143,20 +112,20 @@
             <div class="admin-section-card">
                 <h2 class="section-title"><i class="fas fa-file-upload"></i> Failu augšupielāde</h2>
                 <div class="file-upload-area">
-                    <form method="POST" action="files" enctype="multipart/form-data" class="file-upload-form" id="CriterionForm" onsubmit="event.preventDefault(); sendForm('CriterionForm');">
+                    <form action="files" enctype="multipart/form-data" class="file-upload-form" id="CriterionForm" onsubmit="event.preventDefault(); sendForm('CriterionForm', 'POST');">
                         <input type="hidden" name="file_type" value="criterion">
                         <label for="criteria-file" class="btn btn-file-upload hover-lift">
                             <i class="fas fa-file-pdf"></i> Izvēlēties kritērijus (.pdf)
-                            <input type="file" id="criteria-file" name="file" style="display: none;" onchange="sendForm('CriterionForm')" accept=".pdf">
+                            <input type="file" id="criteria-file" name="file" style="display: none;" onchange="sendForm('CriterionForm', 'POST')" accept=".pdf">
                         </label>
                          <span class="file-info">Kritēriju fails: {{ criterion_file_status }}</span>
                     </form>
 
-                    <form method="POST" action="files" enctype="multipart/form-data" class="file-upload-form">
+                    <form action="files" enctype="multipart/form-data" class="file-upload-form" id="CriterionForm" onsubmit="event.preventDefault(); sendForm('CriterionForm', 'POST');">
                         <input type="hidden" name="file_type" value="schedule">
                         <label for="activity-file" class="btn btn-file-upload hover-lift">
                              <i class="fas fa-calendar-alt"></i> Izvēlēties grafiku (.pdf)
-                            <input type="file" id="activity-file" name="file" style="display: none;" onchange="this.form.submit()" accept=".pdf">
+                            <input type="file" id="activity-file" name="file" style="display: none;" onchange="sendForm('CriterionForm', 'POST')" accept=".pdf">
                         </label>
                          <span class="file-info">Grafika fails: {{ schedule_file_status }}</span>
                     </form>
