@@ -587,13 +587,20 @@ body {
 }
 
 .admin-action-btn.cancel-btn {
-    background-color: #6c757d; /* Pelēka sekundārā poga */
-    border-color: #6c757d;
+
+    background-color: white ;
+    color: #28a745;
+    padding: 0.9rem 1.8rem;
+    margin-bottom: 0;
+    border-radius: 8px;
+    border: 1px solid #28a745;
+    
 }
 .admin-action-btn.cancel-btn:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-    box-shadow: 0 2px 5px rgba(108, 117, 125, 0.2);
+    background-color: #28a7460e;
+    border-color: #2ab44a;
+    box-shadow: 0 2px 5px rgba(109, 125, 108, 0.2);
+    transform: translateY(-5px);
 }
 
 

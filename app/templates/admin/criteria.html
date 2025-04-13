@@ -48,6 +48,7 @@
     </div>
 
     <div class="main-content admin-main-content">
+        <div id="main" class="flash-messages-container"></div>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages-container">
@@ -63,7 +64,7 @@
 
         <div class="admin-section-card">
             <h2 class="section-title"><i class="fas fa-plus-circle"></i> Pievienot jaunu kritēriju</h2>
-            <form method="POST" action="{{ url_for('admin.add_criteria') }}" class="admin-form">
+            <form class="admin-form" id="AddCriteria" onsubmit="event.preventDefault(); sendForm('AddCriteria', 'POST');">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="name"><i class="fas fa-tag"></i> Kritērija nosaukums</label>
@@ -110,23 +111,27 @@
                                         <div class="modal-content admin-modal-content">
                                             <label for="edit-{{ criterion.id }}" class="modal-close admin-modal-close">&times;</label>
                                             <h3 class="modal-title"><i class="fas fa-edit"></i> Rediģēt kritēriju</h3>
-                                            <form method="POST" action="{{ url_for('admin.change_criteria') }}" class="admin-form">
-                                                <input type="hidden" name="id" value="{{ criterion.id }}"> {# Pievienojam ID lauku #}
+
+                                            <form class="admin-form" id="ChangeCriteria_{{criterion.id}}" onsubmit="event.preventDefault(); sendForm('ChangeCriteria_{{criterion.id}}', 'PATCH');">
+                                                <input type="hidden" name="id" value="{{ criterion.id }}">
+
                                                 <div class="form-group">
                                                     <label for="edit-name-{{ criterion.id }}"><i class="fas fa-tag"></i> Nosaukums</label>
                                                     <input type="text" id="edit-name-{{ criterion.id }}" name="name" class="admin-form-control" value="{{ criterion.name }}" required>
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label for="edit-coefficient-{{ criterion.id }}"><i class="fas fa-calculator"></i> Koeficients</label>
                                                     <input type="number" id="edit-coefficient-{{ criterion.id }}" step="0.1" name="coefficient" class="admin-form-control" value="{{ criterion.coefficient }}" required>
                                                 </div>
+
                                                 <div class="modal-actions">
-                                                    <button type="submit" name="action" value="save" class="btn btn-submit admin-submit-btn hover-lift">
+                                                    <button type="submit" value="save" class="btn btn-submit admin-submit-btn hover-lift">
                                                         <i class="fas fa-save"></i> Saglabāt
                                                     </button>
-                                                    <button type="submit" name="action" value="delete" class="btn btn-danger admin-action-btn danger-btn hover-lift" formaction="criteria/delete">
-                                                        <i class="fas fa-trash-alt"></i> Dzēst
-                                                    </button>
+                                                        <button type="button" class="btn btn-danger admin-action-btn danger-btn hover-lift" onclick="sendForm('ChangeCriteria_{{criterion.id}}', 'DELETE');">
+                                                            <i class="fas fa-trash-alt"></i> Dzēst
+                                                        </button>
                                                      <label for="edit-{{ criterion.id }}" class="btn btn-secondary admin-action-btn cancel-btn">
                                                         <i class="fas fa-times"></i> Atcelt
                                                     </label>

@@ -281,10 +281,15 @@ def add_criteria():
     cashing_top_by_group("young")
     cashing_top_by_group("old")
 
+    
+    response = current_app.response_class(
+        response=json.dumps({'success':True, "message": "Kriterijs bija veiksmīgi pievienots", "reload": True}),
+        status=201,
+        mimetype="application/json")
     flash('Kriterijs bija veiksmīgi pievienots', 'success')
-    return redirect(url_for('admin.criteria')), 302
+    return response
 
-@admin_bp.route("/criteria/change", methods=['POST'])
+@admin_bp.route("/criteria", methods=['PATCH'])
 @login_required
 def change_criteria():
     if not current_user.adding_category:
@@ -307,10 +312,15 @@ def change_criteria():
     cashing_top_by_group("young")
     cashing_top_by_group("old")
 
+    
+    response = current_app.response_class(
+        response=json.dumps({'success':True, "message": "Kriterijs bija veiksmīgi rediģets", "reload": True}),
+        status=200,
+        mimetype="application/json")
     flash('Kriterijs bija veiksmīgi rediģets', 'success')
-    return redirect(url_for('admin.criteria')), 302
+    return response
 
-@admin_bp.route("/criteria/delete", methods=['POST'])
+@admin_bp.route("/criteria", methods=['DELETE'])
 @login_required
 def delete_criteria():
     if not current_user.adding_category:
@@ -329,8 +339,12 @@ def delete_criteria():
     cashing_top_by_group("young")
     cashing_top_by_group("old")
 
+    response = current_app.response_class(
+        response=json.dumps({'success':True, "message": "Kriterijs bija veiksmīgi dzēsts", "reload": True}),
+        status=200,
+        mimetype="application/json")
     flash('Kriterijs bija veiksmīgi dzēsts', 'success')
-    return redirect(url_for('admin.criteria')), 302
+    return response
 
 @admin_bp.route('/administration')
 @login_required
