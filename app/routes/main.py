@@ -25,10 +25,7 @@ def index():
         top_clases = []
         for i in top:
             cl = r.hgetall(i)
-            top_clases.append(School_classes(cl["name"], cl["id"], cl["age_group"], cl["place"], cl["activity"]))
-
-        current_app.logger.info(f"Top classes: {top_clases}")
-        
+            top_clases.append(School_classes(cl["name"], cl["id"], cl["age_group"], cl["place"], cl["activity"]))     
 
         return render_template('index.html', classes = classes, group=group, top_clases = top_clases)
     except:

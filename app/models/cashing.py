@@ -57,6 +57,6 @@ def cashing_top_by_group(group):
                    "id": classe.id,
                    "age_group": group,
                    "place": place,
-                   "activity": value}
+                   "activity": round(value, 2)}
         r.hset(key, mapping=mapping)
         r.rpush(f"{group}_classes", str(key))

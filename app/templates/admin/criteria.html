@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
+    <script src="{{ url_for('static',filename='script.js') }}"></script>
 </head>
 <body>
     <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" hidden>
@@ -19,29 +20,29 @@
              <p>{{ user.name }}</p>
         </div>
         <ul class="nav-menu admin-nav-menu">
-             <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin'">
-                <i class="fas fa-tachometer-alt"></i> Galvenā
+            <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin?group=young'">
+               <i class="fas fa-tachometer-alt"></i> Galvenā
             </li>
-            <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='{{ url_for('admin.user') }}'">
-                 <i class="fas fa-user-edit"></i> Lietotājs
+            <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='user'"> {# Aktīvā saite #}
+                <i class="fas fa-user-edit"></i> Lietotājs
             </li>
             {% if user.adding_classes %}
-            <li class="nav-item {% if request.endpoint == 'admin.school_class' %}active{% endif %}" onclick="location.href='{{ url_for('admin.school_class') }}'">
-                <i class="fas fa-school"></i> Klases
+            <li class="nav-item {% if request.endpoint == 'admin.school_class' %}active{% endif %}" onclick="location.href='classes?group=young'">
+               <i class="fas fa-school"></i> Klases
             </li>
             {% endif %}
             {% if user.adding_category %}
-            <li class="nav-item active" onclick="location.href='{{ url_for('admin.criteria') }}'"> {# Aktīvā saite #}
-                <i class="fas fa-tasks"></i> Kritēriji
+            <li class="nav-item active" onclick="location.href='criteria'">
+               <i class="fas fa-tasks"></i> Kritēriji
             </li>
             {% endif %}
             {% if user.adding_users %}
-            <li class="nav-item {% if request.endpoint == 'admin.administration' %}active{% endif %}" onclick="location.href='{{ url_for('admin.administration') }}'">
-                 <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
+            <li class="nav-item {% if request.endpoint == 'admin.administration' %}active{% endif %}" onclick="location.href='administration'">
+                <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
             </li>
             {% endif %}
             <li class="nav-item exit" onclick="location.href='/logout'">
-                 <i class="fas fa-sign-out-alt"></i> Iziet no sistēmas
+                <i class="fas fa-sign-out-alt"></i> Iziet no sistēmas
             </li>
         </ul>
     </div>
