@@ -37,7 +37,7 @@
             </li>
             {% endif %}
             {% if user.adding_users %}
-            <li class="nav-item {% if request.endpoint == 'admin.administration' %}active{% endif %}" onclick="location.href='administration'">
+            <li class="nav-item {% if request.endpoint == 'admin.system' %}active{% endif %}" onclick="location.href='system'">
                 <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
             </li>
             {% endif %}

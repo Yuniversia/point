@@ -346,9 +346,9 @@ def delete_criteria():
     flash('Kriterijs bija veiksmīgi dzēsts', 'success')
     return response
 
-@admin_bp.route('/administration')
+@admin_bp.route('/system')
 @login_required
-def administration():
+def system():
     if not current_user.adding_users:
         flash("Jūms nav tiesību", "error")
         return redirect(request.url)
@@ -356,9 +356,9 @@ def administration():
     user = User.query.filter_by(id=current_user.id).first()
 
     users = User.query.all()
-    return render_template('admin/administration.html', user=user, users=users)
+    return render_template('admin/system.html', user=user, users=users)
 
-@admin_bp.route('/administration', methods=['POST'])
+@admin_bp.route('/users', methods=['POST'])
 @login_required
 def add_user():
     if not current_user.adding_users:
@@ -389,7 +389,7 @@ def add_user():
     flash('Lietotajs bija pievienots', 'success')
     return redirect(url_for('admin.administration')), 302
 
-@admin_bp.route('/administration/delete', methods=['POST'])
+@admin_bp.route('/users', methods=['DELETE'])
 @login_required
 def delete_user():
     if current_user.adding_users:
