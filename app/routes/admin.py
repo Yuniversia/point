@@ -372,6 +372,13 @@ def add_user():
     adding_category = request.form.get('adding_category')
     adding_users = request.form.get('adding_users')
 
+    if User.query.filter_by(username=username).one_or_none():
+        response = current_app.response_class(
+            response=json.dumps({'success':False, "message": "Lietotajs ar tadu vardu eksiste", "reload": False}),
+            status=409,
+            mimetype="application/json")
+        return response
+
     u = User(
         username=username,
         name=name,
@@ -386,8 +393,13 @@ def add_user():
     db.session.add(u)
     db.session.commit()
 
+    
+    response = current_app.response_class(
+        response=json.dumps({'success':True, "message": "Lietotajs bija pievienots", "reload": True}),
+        status=200,
+        mimetype="application/json")
     flash('Lietotajs bija pievienots', 'success')
-    return redirect(url_for('admin.administration')), 302
+    return response
 
 @admin_bp.route('/users', methods=['DELETE'])
 @login_required
@@ -399,8 +411,43 @@ def delete_user():
         db.session.delete(user)
         db.session.commit()
 
+        response = current_app.response_class(
+            response=json.dumps({'success':True, "message": "Lietotajs bija pievienots", "reload": True}),
+            status=200,
+            mimetype="application/json")
         flash('Lietotajs bija veiksmīgi dzēsts', 'success')
-        return redirect(url_for('admin.administration')), 302
+        return response
     
-    flash('Jus neesat administrators', 'error')
-    return redirect(url_for('admin.administration')), 302
+    response = current_app.response_class(
+        response=json.dumps({'success':False, "message": "Jus neesat administrators", "reload": False}),
+        status=409,
+        mimetype="application/json")
+    return response
+
+@admin_bp.route('/db', methods=['DELETE'])
+@login_required
+def delete_db():
+    if current_user.adding_users:
+
+        classes = ClassGroup.query.all()
+        for scholl_class in classes:
+            db.session.delete(scholl_class)
+        db.session.commit()
+
+        max_point_cashing("young")
+        max_point_cashing("old")
+        cashing_top_by_group("young")
+        cashing_top_by_group("old")
+
+        response = current_app.response_class(
+            response=json.dumps({'success':True, "message": "Datu baze bija attirita", "reload": True}),
+            status=200,
+            mimetype="application/json")
+        flash("Datu baze bija attirita", 'success')
+        return response
+    
+    response = current_app.response_class(
+        response=json.dumps({'success':False, "message": "Jus neesat administrators", "reload": False}),
+        status=409,
+        mimetype="application/json")
+    return response

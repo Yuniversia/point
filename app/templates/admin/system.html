@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
+    <script src="{{ url_for('static',filename='script.js') }}"></script>
 </head>
 <body>
     <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" hidden>
@@ -22,7 +23,7 @@
             <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin?group=young'">
                <i class="fas fa-tachometer-alt"></i> Galvenā
            </li>
-           <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='user'"> {# Aktīvā saite #}
+            <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='user'"> {# Aktīvā saite #}
                 <i class="fas fa-user-edit"></i> Lietotājs
            </li>
            {% if user.adding_classes %}
@@ -40,17 +41,18 @@
                 <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
            </li>
            {% endif %}
-           <li class="nav-item exit" onclick="location.href='/logout'">
+            <li class="nav-item exit" onclick="location.href='/logout'">
                 <i class="fas fa-sign-out-alt"></i> Iziet no sistēmas
            </li>
        </ul>
     </div>
 
     <div class="main-content admin-main-content">
+        <div id="main" class="flash-messages-container"></div>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages-container">
-                     {% for category, message in messages %}
+                    {% for category, message in messages %}
                     <div class="alert alert-{{ category }} admin-alert">
                         <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
                         {{ message }}
@@ -62,8 +64,8 @@
 
         <div class="admin-section-card">
             <h2 class="section-title"><i class="fas fa-user-plus"></i> Pievienot jaunu lietotāju</h2>
-            <form action="users" class="admin-form">
-                 <div class="form-grid">
+            <form action="users" class="admin-form" id="AddUser" onsubmit="event.preventDefault(); sendForm('AddUser', 'POST');">
+                <div class="form-grid">
                     <div class="form-group">
                         <label for="username"><i class="fas fa-user"></i> Lietotājvārds</label>
                         <input type="text" id="username" name="username" class="admin-form-control" placeholder="Jauns lietotājvārds" required>
@@ -72,22 +74,22 @@
                         <label for="name"><i class="fas fa-id-badge"></i> Vārds, Uzvārds</label>
                         <input type="text" id="name" name="name" class="admin-form-control" placeholder="Pilnais vārds" required>
                     </div>
-                     <div class="form-group form-group-full">
-                         <label for="password"><i class="fas fa-key"></i> Parole</label>
+                    <div class="form-group form-group-full">
+                        <label for="password"><i class="fas fa-key"></i> Parole</label>
                         <input type="password" id="password" name="password" class="admin-form-control" placeholder="Izveidojiet paroli" required>
-                     </div>
+                    </div>
                  </div>
 
                 <div class="form-group permission-group">
                     <label><i class="fas fa-check-square"></i> Lietotāja tiesības:</label>
-                     <div class="permission-options">
+                    <div class="permission-options">
                         <label class="checkbox-label">
                             <input type="checkbox" checked disabled>
                             <i class="fas fa-star"></i> Punktu pievienošana (vienmēr aktīvs)
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" name="adding_classes">
-                             <i class="fas fa-school"></i> Klašu izveide
+                            <i class="fas fa-school"></i> Klašu izveide
                         </label>
                          <label class="checkbox-label">
                              <input type="checkbox" name="adding_category">
@@ -95,7 +97,7 @@
                          </label>
                         <label class="checkbox-label">
                             <input type="checkbox" name="adding_users">
-                             <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
+                            <i class="fas fa-users-cog"></i> Lietotāju pārvaldība
                         </label>
                     </div>
                  </div>
@@ -132,8 +134,8 @@
                                 </div>
                              </td>
                             <td data-label="Darbības">
-                                {% if user.id != user_from_list.id %} {# Nevar dzēst pats sevi #}
-                                <form method="POST" action="{{ url_for('admin.delete_user') }}" style="display: inline;">
+                                {% if user.id != user_from_list.id and user_from_list.username != "admin" %} {# Nevar dzēst pats sevi #}
+                                <form style="display: inline;" action="users" id="DelUser_{{ user_from_list.id }}" onsubmit="event.preventDefault(); sendForm('DelUser_{{ user_from_list.id }}', 'DELETE');">
                                     <input type="hidden" name="user_id" value="{{ user_from_list.id }}">
                                     <button type="submit" class="btn btn-danger admin-action-btn danger-btn hover-lift" onclick="return confirm('Vai tiešām vēlaties dzēst lietotāju \'{{ user_from_list.username }}\'?');">
                                         <i class="fas fa-trash-alt"></i> Dzēst
@@ -149,6 +151,36 @@
                 </table>
             </div>
         </div>
+
+        <div class="admin-section-card">
+            <h2 class="section-title"><i class="fas fa-database"></i> Datu bāzes pārvaldība</h2>
+            <p style="margin-bottom: 1.5rem; color: #dc3545;"><strong><i class="fas fa-exclamation-triangle"></i> Uzmanību:</strong> Zemāk esošā darbība ir neatgriezeniska un dzēsīs svarīgus datus.</p>
+
+            <label for="clearDbModalToggle" class="btn btn-danger admin-action-btn danger-btn hover-lift">
+                <i class="fas fa-trash-alt"></i> Notīrīt visu datu bāzi
+            </label>
+        </div>
+        </div> <input type="checkbox" id="clearDbModalToggle" class="modal-toggle" hidden>
+    <div class="modal" id="clearDbModal">
+        <label for="clearDbModalToggle" class="modal-overlay"></label>
+        <div class="admin-modal-content">
+            <label for="clearDbModalToggle" class="admin-modal-close">&times;</label>
+            <h3 class="modal-title"><i class="fas fa-exclamation-triangle" style="color: #dc3545;"></i> Brīdinājums!</h3>
+            <p>Vai tiešām vēlaties pilnībā notīrīt datu bāzi? Šī darbība <strong>neatgriezeniski dzēsīs visas klases un visus pievienotos punktus</strong>.</p>
+            <p>Šo darbību <strong>nevarēs atsaukt</strong>. Lūdzu, esiet ļoti uzmanīgi un apstipriniet savu izvēli tikai tad, ja esat pilnībā pārliecināts.</p>
+            
+            <form action="db" id="clearDbForm" onsubmit="event.preventDefault(); sendForm('clearDbForm', 'DELETE');">
+
+                <div class="modal-actions">
+                    <label for="clearDbModalToggle" class="admin-action-btn cancel-btn hover-lift">
+                        <i class="fas fa-times"></i> Atcelt
+                    </label>
+                        <button type="submit" form="clearDbForm" class="admin-action-btn danger-btn hover-lift">
+                            <i class="fas fa-trash-alt"></i> Apstiprināt dzēšanu
+                        </button>
+                </div>
+            </form>  
+        </div>
     </div>
-</body>
+    </body>
 </html>
