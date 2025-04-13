@@ -34,7 +34,7 @@
             </div>
 
             <div class="places-container">
-                {% if top_clases is not none %}
+                {% if top_clases %}
                     {% for class in top_clases %}
                         {% if loop.index0 == 0 %}
                             <div class="first-place" onclick="window.location.href='class?id={{class.id}}'">
