@@ -8,7 +8,7 @@ class Config:
 
     IP = "127.0.0.1"
     PORT = 2000
-    DEBUG = True
+    DEBUG = False
 
     REDIS_HOST = "localhost"
     REDIS_PORT = 6379
