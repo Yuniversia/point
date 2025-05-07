@@ -77,8 +77,8 @@
                     <div class="form-group">
                         <label for="group"><i class="fas fa-users"></i> Grupa</label>
                         <select name="group" id="group" class="admin-form-control" required>
-                            <option value="young" {% if group == "young" %} selected {% endif %}>Junioru grupa (5.-8.)</option>
-                            <option value="old" {% if group == "old" %} selected {% endif %}>Vecākā grupa (9.-12.)</option>
+                            <option value="young" {% if group == "young" %} selected {% endif %}>Junioru grupa (2.-6.)</option>
+                            <option value="old" {% if group == "old" %} selected {% endif %}>Vecākā grupa (7.-12.)</option>
                         </select>
                     </div>
                 </div>
@@ -96,8 +96,8 @@
                     <div class="form-group">
                         <label for="group_filter"><i class="fas fa-filter"></i> Filtrēt pēc grupas</label>
                         <select name="group" id="group_filter" class="admin-form-control" onchange="this.form.submit()">
-                            <option value="young" {% if group == 'young' %}selected{% endif %}>Junioru grupa (5.-8.)</option>
-                            <option value="old" {% if group == 'old' %}selected{% endif %}>Vecākā grupa (9.-12.)</option>
+                            <option value="young" {% if group == 'young' %}selected{% endif %}>Junioru grupa (2.-6.)</option>
+                            <option value="old" {% if group == 'old' %}selected{% endif %}>Vecākā grupa (7.-12.)</option>
                         </select>
                     </div>
                  </form>
