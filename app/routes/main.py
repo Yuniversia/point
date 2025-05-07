@@ -3,6 +3,9 @@ from app.models.class_group import ClassGroup, School_classes, Comment
 from app.models.point import Point
 from app.models.total_points import Total_point
 from app.models.category import Category
+from app.models.events import Events
+
+from sqlalchemy import desc
 
 import os
 
@@ -19,6 +22,8 @@ def index():
     
     classes = ClassGroup.query.filter_by(age_group=group).order_by(ClassGroup.name).all()
 
+    events_list = Events.query.order_by(desc(Events.date)).all()
+
     try:
         top = r.lrange(f"{group}_classes", 0, 2) # get three first elements how list [2.a, 2.b, 3.a]
 
@@ -27,9 +32,9 @@ def index():
             cl = r.hgetall(i)
             top_clases.append(School_classes(cl["name"], cl["id"], cl["age_group"], cl["place"], cl["activity"]))     
 
-        return render_template('index.html', classes = classes, group=group, top_clases = top_clases)
+        return render_template('index.html', classes = classes, group=group, top_clases = top_clases, events_list = events_list)
     except:
-        return render_template('index.html', group=group, classes = classes)
+        return render_template('index.html', group=group, classes = classes, events_list = events_list)
 
 
 @main_bp.route('/class')

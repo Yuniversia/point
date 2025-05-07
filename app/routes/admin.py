@@ -4,15 +4,18 @@ from app.models.class_group import ClassGroup, School_classes
 from app.models.category import Category
 from app.models.point import Point
 from app.models.total_points import Total_point
+from app.models.events import Events
 from app.models.cashing import cashing_top_by_group, max_point_cashing, r
 
 import os
 import json
+from datetime import datetime, timedelta, date
 
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
+from sqlalchemy import desc
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -451,3 +454,67 @@ def delete_db():
         status=409,
         mimetype="application/json")
     return response
+    
+    
+    
+@admin_bp.route('/events')
+@login_required
+def events():
+    user = User.query.filter_by(id=current_user.id).first()
+    events_list = Events.query.order_by(desc(Events.date)).all()
+
+    return render_template('admin/events.html', user=user, events_list=events_list)
+
+@admin_bp.route('/events', methods=['POST'])
+@login_required
+def add_events():
+    try:
+        name = request.form.get('name')
+        date = request.form.get('date')
+        description = request.form.get('description')
+
+        date = datetime.strptime(f'{date}', '%Y-%m-%d')
+        date = date.date()
+
+        event = Events(author=current_user.name ,name=name, description=description, date=date)
+
+        db.session.add(event)
+        db.session.commit()
+
+        response = current_app.response_class(
+                response=json.dumps({'success':True, "message": "Pasakums bija pievienots", "reload": True}),
+                status=200,
+                mimetype="application/json")
+        flash("Pasakums bija pievienots", 'success')
+        return response
+    except Exception as e:
+        print(e)
+        response = current_app.response_class(
+                response=json.dumps({'success':False, "message": "Kļuda servera pusē", "reload": False}),
+                status=500,
+                mimetype="application/json")
+        return response
+        
+        
+@admin_bp.route('/events', methods=['DELETE'])
+@login_required
+def delete_events():
+    try:
+        id = request.form.get('id')
+
+        event = Events.query.filter(Events.id == id).delete()
+        
+        db.session.commit()
+
+        response = current_app.response_class(
+                response=json.dumps({'success':True, "message": "Pasakums bija dzēst", "reload": True}),
+                status=200,
+                mimetype="application/json")
+        flash("Pasakums bija dzēst", 'success')
+        return response
+    except Exception as e:
+        response = current_app.response_class(
+                response=json.dumps({'success':False, "message": "Kļuda servera pusē", "reload": False}),
+                status=500,
+                mimetype="application/json")
+        return response

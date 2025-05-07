@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasākumu Pārvaldība</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='admin.css') }}">
+    <script src="{{ url_for('static',filename='script.js') }}"></script>
+    <style>
+        /* Additional styles if needed */
+        .admin-form textarea.admin-form-control {
+            min-height: 80px; /* Set a minimum height for the textarea */
+            resize: vertical; /* Allow vertical resizing */
+        }
+        .form-group label i.fa-calendar-day { /* Style for the date icon if needed */
+            color: #28a745; /* Match other icon colors */
+        }
+    </style>
+</head>
+<body>
+    <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" hidden>
+    <label for="mobile-menu-toggle" class="mobile-menu-button admin-burger">☰</label>
+
+    <div class="sidebar admin-sidebar">
+        <div class="profile-section admin-profile">
+             <i class="fas fa-user-circle profile-icon"></i>
+             <h3>{{ user.username }}</h3>
+             <p>{{ user.name }}</p>
+        </div>
+         <ul class="nav-menu admin-nav-menu">
+            <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin?group=young'">
+               <i class="fas fa-tachometer-alt"></i> Galvenā
+           </li>
+           <li class="nav-item active">
+                <i class="fas fa-calendar-check"></i> Pasākumu pārvaldība
+           </li>
+           <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='{{ url_for('admin.user') }}'">
+                <i class="fas fa-user-edit"></i> Lietotājs
+           </li>
+           {% if user.adding_classes %}
+           <li class="nav-item {% if request.endpoint == 'admin.school_class' %}active{% endif %}" onclick="location.href='{{ url_for('admin.school_class') }}?group=young'">
+               <i class="fas fa-school"></i> Klases
+           </li>
+           {% endif %}
+           {% if user.adding_category %}
+           <li class="nav-item {% if request.endpoint == 'admin.criteria' %}active{% endif %}" onclick="location.href='{{ url_for('admin.criteria') }}'">
+               <i class="fas fa-tasks"></i> Kritēriji
+           </li>
+           {% endif %}
+           {% if user.adding_users %}
+           <li class="nav-item {% if request.endpoint == 'admin.system' %}active{% endif %}" onclick="location.href='{{ url_for('admin.system') }}'">
+                <i class="fas fa-users-cog"></i> Sistēmas pārvaldība
+           </li>
+           {% endif %}
+           <li class="nav-item exit" onclick="location.href='/logout'">
+                <i class="fas fa-sign-out-alt"></i> Iziet no sistēmas
+           </li>
+       </ul>
+    </div>
+
+    <div class="main-content admin-main-content">
+
+        <div id="main" class="flash-messages-container"></div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages-container">
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} admin-alert">
+                        <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="admin-section-card">
+            <h2 class="section-title"><i class="fas fa-file-upload"></i> Failu augšupielāde</h2>
+            <div class="file-upload-area">
+                <form action="{{ url_for('admin.upload_file') }}" enctype="multipart/form-data" class="file-upload-form" id="CriterionFileUploadForm" onsubmit="event.preventDefault(); sendForm('CriterionFileUploadForm', 'POST');">
+                    <input type="hidden" name="file_type" value="criterion">
+                    <label for="criteria-file" class="btn btn-file-upload hover-lift">
+                        <i class="fas fa-file-pdf"></i> Izvēlēties kritērijus (.pdf)
+                        <input type="file" id="criteria-file" name="file" style="display: none;" onchange="sendForm('CriterionFileUploadForm', 'POST')" accept=".pdf">
+                    </label>
+                    <span class="file-info">Kritēriju fails: {{ criterion_file_status | default('Nav augšupielādēts') }}</span>
+                </form>
+
+                <form action="{{ url_for('admin.upload_file') }}" enctype="multipart/form-data" class="file-upload-form" id="ScheduleFileUploadForm" onsubmit="event.preventDefault(); sendForm('ScheduleFileUploadForm', 'POST');">
+                    <input type="hidden" name="file_type" value="schedule">
+                    <label for="activity-file" class="btn btn-file-upload hover-lift">
+                         <i class="fas fa-calendar-alt"></i> Izvēlēties grafiku (.pdf)
+                        <input type="file" id="activity-file" name="file" style="display: none;" onchange="sendForm('ScheduleFileUploadForm', 'POST')" accept=".pdf">
+                    </label>
+                    <span class="file-info">Grafika fails: {{ schedule_file_status | default('Nav augšupielādēts') }}</span>
+                 </form>
+            </div>
+        </div>
+        
+        <div class="admin-section-card">
+            <h2 class="section-title"><i class="fas fa-calendar-plus"></i> Pievienot pasākumu</h2>
+            <form action="{{ url_for('admin.add_events') }}" id="EventsForm" class="admin-form" method="POST" onsubmit="event.preventDefault(); sendForm('EventsForm', 'POST');">
+                <div class="form-grid">
+                    <div class="form-group">
+                         <label for="event_name"><i class="fas fa-signature"></i> Pasākuma nosaukums</label>
+                         <input type="text" name="name" id="event_name" class="form-control admin-form-control" placeholder="Ievadiet nosaukumu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event_date"><i class="fas fa-calendar-day"></i> Norises datums</label>
+                        <input type="date" name="date" id="event_date" class="form-control admin-form-control" required>
+                    </div>
+                    <div class="form-group form-group-full">
+                         <label for="event_description"><i class="fas fa-align-left"></i> Apraksts (līdz 400 simboliem)</label>
+                         <textarea name="description" id="event_description" class="form-control admin-form-control" placeholder="Īss pasākuma apraksts..." required maxlength="400"></textarea>
+                    </div>
+               </div>
+                <button type="submit" class="btn btn-submit admin-submit-btn hover-lift">
+                    <i class="fas fa-paper-plane"></i> Pievienot pasākumu
+                </button>
+            </form>
+        </div>
+
+        <div class="admin-section-card">
+            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Esošie pasākumi</h2>
+            {% if events_list %}
+            <div class="table-responsive-admin">
+                <table class="table admin-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-signature"></i> Nosaukums</th>
+                            <th><i class="fas fa-calendar-day"></i> Datums</th>
+                            <th><i class="fas fa-info-circle"></i> Autors</th>
+                            <th><i class="fas fa-cogs"></i> Darbības</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for event_item in events_list %}  <tr>
+                            <td data-label="Nosaukums">{{ event_item.name }}</td>
+                            <td data-label="Datums">{{ event_item.date.strftime('%Y-%m-%d') }}</td>
+                            <td data-label="Apraksts">{{ event_item.author }}</td>
+                            <td data-label="Darbības">
+                                <form id="DeleteEvent_{{ event_item.id }}" style="display: inline;" onsubmit="event.preventDefault(); if(confirm('Vai tiešām vēlaties dzēst šo pasākumu?')) { sendForm('DeleteEvent_{{ event_item.id }}', 'DELETE'); }">
+                                    <input type="hidden" name="id" value="{{ event_item.id }}">
+                                    <button type="submit" class="btn btn-danger admin-action-btn danger-btn hover-lift">
+                                        <i class="fas fa-trash-alt"></i> Dzēst
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="no-data"><i class="fas fa-info-circle"></i> Pašlaik nav pievienotu pasākumu.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

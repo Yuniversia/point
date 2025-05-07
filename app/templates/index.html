@@ -178,29 +178,30 @@
 
         <section class="timeline-section" id="new">
             <h2 class="section-title"><i class="fas fa-history"></i> Jaunākie notikumi</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">15. Apr</div>
-                    <div class="timeline-content">
-                        <h3>Skolas konkursa noslēgums</h3>
-                        <p>Notika ikgadējā skolas konkursa noslēguma ceremonija</p>
-                    </div>
+
+            {% if events_list %}
+                <div class="timeline">
+                    <!-- <div class="timeline-item">
+                        <div class="timeline-date">10. Apr</div>
+                        <div class="timeline-content">
+                            <h3>Sporta diena</h3>
+                            <p>Skolā notika sporta diena, kurā piedalījās visas klases</p>
+                        </div>
+                    </div> -->
+                    {% for event_item in events_list %}  <tr>
+                        <div class="timeline-item">
+                            <div class="timeline-date"> {{ event_item.date.strftime('%d. %b') }}</div>
+                            <div class="timeline-content">
+                                <h3>{{ event_item.name }}</h3>
+                                <p>{{ event_item.description }}</p>
+                            </div>
+                        </div>
+
+                    {% endfor %}
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">10. Apr</div>
-                    <div class="timeline-content">
-                        <h3>Sporta diena</h3>
-                        <p>Skolā notika sporta diena, kurā piedalījās visas klases</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">5. Apr</div>
-                    <div class="timeline-content">
-                        <h3>Mākslas izstāde</h3>
-                        <p>Skolas aulā tika atklāta skolēnu mākslas darbu izstāde</p>
-                    </div>
-                </div>
-            </div>
+            {% else %}
+            <p class="no-data"><i class="fas fa-info-circle"></i> Pašlaik nav pievienotu pasākumu.</p>
+            {% endif %}
         </section>
     </main>
 

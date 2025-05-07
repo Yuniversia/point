@@ -20,6 +20,9 @@
             <li class="nav-item {% if request.endpoint == 'admin.main' %}active{% endif %}" onclick="location.href='/admin?group=young'">
                <i class="fas fa-tachometer-alt"></i> Galvenā
            </li>
+           <li class="nav-item {% if request.endpoint == 'admin.events' %} active {% endif %}" onclick="location.href='/admin/events'">
+                <i class="fas fa-calendar-check"></i> Pasākumu pārvaldība
+           </li>
            <li class="nav-item {% if request.endpoint == 'admin.user' %}active{% endif %}" onclick="location.href='user'"> {# Aktīvā saite #}
                 <i class="fas fa-user-edit"></i> Lietotājs
            </li>
@@ -107,29 +110,6 @@
                         </select>
                     </div>
                      </form>
-            </div>
-
-            <div class="admin-section-card">
-                <h2 class="section-title"><i class="fas fa-file-upload"></i> Failu augšupielāde</h2>
-                <div class="file-upload-area">
-                    <form action="files" enctype="multipart/form-data" class="file-upload-form" id="CriterionForm" onsubmit="event.preventDefault(); sendForm('CriterionForm', 'POST');">
-                        <input type="hidden" name="file_type" value="criterion">
-                        <label for="criteria-file" class="btn btn-file-upload hover-lift">
-                            <i class="fas fa-file-pdf"></i> Izvēlēties kritērijus (.pdf)
-                            <input type="file" id="criteria-file" name="file" style="display: none;" onchange="sendForm('CriterionForm', 'POST')" accept=".pdf">
-                        </label>
-                         <span class="file-info">Kritēriju fails: {{ criterion_file_status }}</span>
-                    </form>
-
-                    <form action="files" enctype="multipart/form-data" class="file-upload-form" id="CriterionForm" onsubmit="event.preventDefault(); sendForm('CriterionForm', 'POST');">
-                        <input type="hidden" name="file_type" value="schedule">
-                        <label for="activity-file" class="btn btn-file-upload hover-lift">
-                             <i class="fas fa-calendar-alt"></i> Izvēlēties grafiku (.pdf)
-                            <input type="file" id="activity-file" name="file" style="display: none;" onchange="sendForm('CriterionForm', 'POST')" accept=".pdf">
-                        </label>
-                         <span class="file-info">Grafika fails: {{ schedule_file_status }}</span>
-                    </form>
-                </div>
             </div>
         </div>
 
